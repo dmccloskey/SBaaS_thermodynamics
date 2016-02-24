@@ -3,11 +3,6 @@ from .stage03_quantification_dG_f_io import stage03_quantification_dG_f_io
 from .stage03_quantification_otherData_query import stage03_quantification_otherData_query
 from .stage03_quantification_metid2keggid_query import stage03_quantification_metid2keggid_query
 from .stage03_quantification_simulation_query import stage03_quantification_simulation_query
-#SBaaS models (delete if not needed)
-from .stage03_quantification_dG_f_postgresql_models import *
-# Resources (delete if not needed)
-from io_utilities.base_importData import base_importData
-from io_utilities.base_exportData import base_exportData
 # Dependencies from thermodynamics
 from thermodynamics.thermodynamics_dG_f_data import thermodynamics_dG_f_data
 from thermodynamics.thermodynamics_otherData import thermodynamics_otherData
@@ -19,6 +14,7 @@ class stage03_quantification_dG_f_execute(stage03_quantification_dG_f_io,
     def execute_adjust_dG_f(self,experiment_id_I,models_I,model_ids_I = [],time_points_I=[],sample_name_abbreviations_I=[]):
         '''adjust dG0_f to specified temperature, pH, and ionic strength'''
         
+        dGf_O = [];
         # query dG0f data
         id2kegg = {};
         id2kegg = self.get_rowsDict_dataStage03QuantificationMetid2keggid();
@@ -80,27 +76,30 @@ class stage03_quantification_dG_f_execute(stage03_quantification_dG_f_io,
                             'measured':True,
                             'used_':True,
                             'comment_':None};
-                        row = None;
-                        row = data_stage03_quantification_dG_f(experiment_id_I,
-                            model_id,
-                            sna,
-                            tp,
-                            None,
-                            k,
-                            v['dG_f'],
-                            v['dG_f_var'],
-                            v['dG_f_units'],
-                            None,
-                            None,
-                            temperature[compartment]['temperature'],
-                            temperature[compartment]['temperature_units'],
-                            ionic_strength[compartment]['ionic_strength'],
-                            ionic_strength[compartment]['ionic_strength_units'],
-                            pH[compartment]['pH'],
-                            None,
-                            True,
-                            True,
-                            None);
-                        self.session.add(row);
-        self.session.commit();
+                        dGf_O.append(data_tmp);
+                        #row = None;
+                        #row = data_stage03_quantification_dG_f(experiment_id_I,
+                        #    model_id,
+                        #    sna,
+                        #    tp,
+                        #    None,
+                        #    k,
+                        #    v['dG_f'],
+                        #    v['dG_f_var'],
+                        #    v['dG_f_units'],
+                        #    None,
+                        #    None,
+                        #    temperature[compartment]['temperature'],
+                        #    temperature[compartment]['temperature_units'],
+                        #    ionic_strength[compartment]['ionic_strength'],
+                        #    ionic_strength[compartment]['ionic_strength_units'],
+                        #    pH[compartment]['pH'],
+                        #    None,
+                        #    True,
+                        #    True,
+                        #    None);
+                        #self.session.add(row);
+        #add data to to the DB
+        self.add_dataStage03QuantificationDGf(dGf_O);
+        #self.session.commit();
     

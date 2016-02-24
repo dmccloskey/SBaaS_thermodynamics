@@ -70,7 +70,7 @@ class stage03_quantification_simulatedData_query(sbaas_template_query):
         except SQLAlchemyError as e:
             print(e);
     # update rows of data_stage03_quantification_simulatedData    
-    def update_dataStage03SimulatedData(self,data_I):
+    def update_dataStage03QuantificationSimulatedData(self,data_I):
         '''update rows of data_stage03_quantification_simulatedData'''
         if data_I:
             for d in data_I:
@@ -93,28 +93,30 @@ class stage03_quantification_simulatedData_query(sbaas_template_query):
                     print(e);
             self.session.commit();
 
-    def add_dataStage03SimulatedData(self, data_I):
+    def add_dataStage03QuantificationSimulatedData(self, data_I):
         '''add rows of data_stage03_quantification_simulatedData'''
         if data_I:
             for d in data_I:
                 try:
-                    data_add = data_stage03_quantification_simulatedData(d['experiment_id'],
-                                d['model_id'],
-                                d['rxn_id'],
-                                d['fba_flux'],
-                                d['fva_minimum'],
-                                d['fva_maximum'],
-                                d['flux_units'],
-                                d['sra_gr'],
-                                d['sra_gr_ratio'],
-                                d['used_'],
-                                d['comment_']);
+                    data_add = data_stage03_quantification_simulatedData(d
+                        #d['experiment_id'],
+                        #d['model_id'],
+                        #d['rxn_id'],
+                        #d['fba_flux'],
+                        #d['fva_minimum'],
+                        #d['fva_maximum'],
+                        #d['flux_units'],
+                        #d['sra_gr'],
+                        #d['sra_gr_ratio'],
+                        #d['used_'],
+                        #d['comment_']
+                        );
                     self.session.add(data_add);
                 except SQLAlchemyError as e:
                     print(e);
             self.session.commit();
 
-    def update_dataStage03SimulatedData(self,data_I):
+    def update_dataStage03QuantificationSimulatedData(self,data_I):
         #Not yet tested
         '''update rows of data_stage03_quantification_simulatedData'''
         if data_I:

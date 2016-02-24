@@ -77,7 +77,7 @@ class data_stage03_quantification_measuredFluxes(Base):
     experiment_id = Column(String(50))
     model_id = Column(String(50))
     sample_name_abbreviation = Column(String(100))
-    time_point = Column(String(10))
+    #time_point = Column(String(10))
     rxn_id = Column(String(100))
     flux_average = Column(Float);
     flux_stdev = Column(Float);
@@ -88,14 +88,14 @@ class data_stage03_quantification_measuredFluxes(Base):
     comment_ = Column(Text);
 
     __table_args__ = (
-            UniqueConstraint('experiment_id','sample_name_abbreviation','rxn_id','model_id','time_point'),
+            #UniqueConstraint('experiment_id','sample_name_abbreviation','rxn_id','model_id','time_point'),
+            UniqueConstraint('experiment_id','sample_name_abbreviation','rxn_id','model_id'),
             )
     
     def __init__(self, 
                 row_dict_I,
                 ):
         self.used_=data_dict_I['used_'];
-        self.id=data_dict_I['id'];
         self.experiment_id=data_dict_I['experiment_id'];
         self.model_id=data_dict_I['model_id'];
         self.sample_name_abbreviation=data_dict_I['sample_name_abbreviation'];
@@ -110,7 +110,7 @@ class data_stage03_quantification_measuredFluxes(Base):
     def __set__row__(self,experiment_id_I,
             model_id_I,
             sample_name_abbreviation_I,
-            time_point_I,
+            #time_point_I,
             rxn_id_I,
             flux_average_I,
             flux_stdev_I,
@@ -122,7 +122,7 @@ class data_stage03_quantification_measuredFluxes(Base):
         self.experiment_id=experiment_id_I
         self.model_id=model_id_I
         self.sample_name_abbreviation=sample_name_abbreviation_I
-        self.time_point=time_point_I
+        #self.time_point=time_point_I
         self.rxn_id=rxn_id_I
         self.flux_average=flux_average_I
         self.flux_stdev=flux_stdev_I

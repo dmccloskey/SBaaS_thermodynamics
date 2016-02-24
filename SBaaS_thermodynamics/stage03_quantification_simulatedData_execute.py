@@ -1,11 +1,6 @@
 #SBaaS
 from .stage03_quantification_simulatedData_io import stage03_quantification_simulatedData_io
 from .stage03_quantification_simulation_query import stage03_quantification_simulation_query
-#SBaaS models (delete if not needed)
-from .stage03_quantification_simulatedData_postgresql_models import *
-# Resources (delete if not needed)
-from io_utilities.base_importData import base_importData
-from io_utilities.base_exportData import base_exportData
 # Dependencies from thermodynamics
 from thermodynamics.thermodynamics_simulatedData import thermodynamics_simulatedData
 
@@ -47,24 +42,25 @@ class stage03_quantification_simulatedData_execute(stage03_quantification_simula
                 'used_':True,
                 'comment_':None};
                 data_O.append(data_tmp);
-                try:
-                    row = None;
-                    row = data_stage03_quantification_simulatedData(experiment_id_I,
-                            model_id,
-                            k,
-                            None, #reserved for parsimonious fba
-                            simulated_data.fva_data[k]['minimum'],
-                            simulated_data.fva_data[k]['maximum'],
-                            'mmol*gDCW-1*hr-1',
-                            simulated_data.sra_data[k]['gr'],
-                            simulated_data.sra_data[k]['gr_ratio'],
-                            True,
-                            None);
-                    self.session.add(row);
-                    self.session.commit();
-                except sqlalchemy.exc.IntegrityError as e:
-                    print(e);
-                    print("Press any key to continue")
-                    a=input();
-                    self.update_dataStage03SimulatedData([tmp]);
-    
+                #try:
+                #    row = None;
+                #    row = data_stage03_quantification_simulatedData(experiment_id_I,
+                #            model_id,
+                #            k,
+                #            None, #reserved for parsimonious fba
+                #            simulated_data.fva_data[k]['minimum'],
+                #            simulated_data.fva_data[k]['maximum'],
+                #            'mmol*gDCW-1*hr-1',
+                #            simulated_data.sra_data[k]['gr'],
+                #            simulated_data.sra_data[k]['gr_ratio'],
+                #            True,
+                #            None);
+                #    self.session.add(row);
+                #    self.session.commit();
+                #except sqlalchemy.exc.IntegrityError as e:
+                #    print(e);
+                #    print("Press any key to continue")
+                #    a=input();
+                #    self.update_dataStage03SimulatedData([tmp]);
+        #add data to the DB
+        self.add_dataStage03QuantificationSimulatedData(data_O);

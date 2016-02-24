@@ -198,18 +198,20 @@ class stage03_quantification_measuredData_query(sbaas_template_query):
         if data_I:
             for d in data_I:
                 try:
-                    data_add = data_stage03_quantification_metabolomicsData(d['experiment_id'],
-                            d['sample_name_abbreviation'],
-                            d['time_point'],
-                            d['met_id'],
-                            d['concentration'],
-                            d['concentration_var'],
-                            d['concentration_units'],
-                            d['concentration_lb'],
-                            d['concentration_ub'],
-                            d['measured'],
-                            d['used_'],
-                            d['comment_']);
+                    data_add = data_stage03_quantification_metabolomicsData(d
+                        #d['experiment_id'],
+                        #d['sample_name_abbreviation'],
+                        #d['time_point'],
+                        #d['met_id'],
+                        #d['concentration'],
+                        #d['concentration_var'],
+                        #d['concentration_units'],
+                        #d['concentration_lb'],
+                        #d['concentration_ub'],
+                        #d['measured'],
+                        #d['used_'],
+                        #d['comment_']
+                        );
                     self.session.add(data_add);
                 except SQLAlchemyError as e:
                     print(e);
@@ -276,18 +278,20 @@ class stage03_quantification_measuredData_query(sbaas_template_query):
         if data_I:
             for d in data_I:
                 try:
-                    data_add = data_stage03_quantification_measuredFluxes(d['experiment_id'],
-                            d['model_id'],
-                            d['sample_name_abbreviation'],
-                            d['time_point'],
-                            d['rxn_id'],
-                            d['flux_average'],
-                            d['flux_stdev'],
-                            d['flux_lb'],
-                            d['flux_ub'],
-                            d['flux_units'],
-                            d['used_'],
-                            d['comment_']);
+                    data_add = data_stage03_quantification_measuredFluxes(d
+                        #d['experiment_id'],
+                        #d['model_id'],
+                        #d['sample_name_abbreviation'],
+                        #d['time_point'],
+                        #d['rxn_id'],
+                        #d['flux_average'],
+                        #d['flux_stdev'],
+                        #d['flux_lb'],
+                        #d['flux_ub'],
+                        #d['flux_units'],
+                        #d['used_'],
+                        #d['comment_']
+                        );
                     self.session.add(data_add);
                 except SQLAlchemyError as e:
                     print(e);

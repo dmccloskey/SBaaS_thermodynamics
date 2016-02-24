@@ -3,11 +3,6 @@ from .stage03_quantification_dG_p_io import stage03_quantification_dG_p_io
 from .stage03_quantification_dG_r_query import stage03_quantification_dG_r_query
 from .stage03_quantification_simulation_query import stage03_quantification_simulation_query
 from SBaaS_models.models_COBRA_query import models_COBRA_query
-#SBaaS models (delete if not needed)
-from .stage03_quantification_dG_p_postgresql_models import *
-# Resources (delete if not needed)
-from io_utilities.base_importData import base_importData
-from io_utilities.base_exportData import base_exportData
 # Dependencies from thermodynamics
 from thermodynamics.thermodynamics_dG_p_data import thermodynamics_dG_p_data
 from thermodynamics.thermodynamics_dG_r_data import thermodynamics_dG_r_data
@@ -20,6 +15,8 @@ class stage03_quantification_dG_p_execute(stage03_quantification_dG_p_io,
                                time_points_I=[],sample_name_abbreviations_I=[]):
         '''calculate dG0_p and dG_p, and perform a thermodynamic consistency check'''
         
+        dG0_p_O = [];
+        dG_p_O = [];
         # get the model ids:
         if model_ids_I:
             model_ids = model_ids_I;
@@ -70,6 +67,7 @@ class stage03_quantification_dG_p_execute(stage03_quantification_dG_p_io,
                                 'dG0_p_ub':tccp.dG0_p[k]['dG0_p_ub'],
                                 'used_':True,
                                 'comment_':None};
+                        dG0_p_O.append(dG0_p_tmp);
                         dG_p_tmp = {'experiment_id':experiment_id_I,
                                 'model_id':model_id,
                                 'sample_name_abbreviation':sna,
@@ -82,38 +80,42 @@ class stage03_quantification_dG_p_execute(stage03_quantification_dG_p_io,
                                 'dG_p_ub':tccp.dG_p[k]['dG_p_ub'],
                                 'used_':True,
                                 'comment_':None};
-                        try:
-                            row = None;
-                            row = data_stage03_quantification_dG0_p(experiment_id_I,
-                                    model_id,
-                                    sna,
-                                    tp,
-                                    k,
-                                    tccp.dG0_p[k]['dG0_p'],
-                                    tccp.dG0_p[k]['dG0_p_var'],
-                                    tccp.dG0_p[k]['dG0_p_units'],
-                                    tccp.dG0_p[k]['dG0_p_lb'],
-                                    tccp.dG0_p[k]['dG0_p_ub'],
-                                    True,
-                                    None);
-                            self.session.add(row);
-                            row = None;
-                            row = data_stage03_quantification_dG_p(experiment_id_I,
-                                    model_id,
-                                    sna,
-                                    tp,
-                                    k,
-                                    tccp.dG_p[k]['dG_p'],
-                                    tccp.dG_p[k]['dG_p_var'],
-                                    tccp.dG_p[k]['dG_p_units'],
-                                    tccp.dG_p[k]['dG_p_lb'],
-                                    tccp.dG_p[k]['dG_p_ub'],
-                                    True,
-                                    None);
-                            self.session.add(row);
-                        except sqlalchemy.exc.IntegrityError as e:
-                            print(e);
-                            print("Press any key to continue")
-                            a=input();
-                    self.session.commit();
+                        dG_p_O.append(dG_p_tmp);
+                        #try:
+                        #    row = None;
+                        #    row = data_stage03_quantification_dG0_p(experiment_id_I,
+                        #            model_id,
+                        #            sna,
+                        #            tp,
+                        #            k,
+                        #            tccp.dG0_p[k]['dG0_p'],
+                        #            tccp.dG0_p[k]['dG0_p_var'],
+                        #            tccp.dG0_p[k]['dG0_p_units'],
+                        #            tccp.dG0_p[k]['dG0_p_lb'],
+                        #            tccp.dG0_p[k]['dG0_p_ub'],
+                        #            True,
+                        #            None);
+                        #    self.session.add(row);
+                        #    row = None;
+                        #    row = data_stage03_quantification_dG_p(experiment_id_I,
+                        #            model_id,
+                        #            sna,
+                        #            tp,
+                        #            k,
+                        #            tccp.dG_p[k]['dG_p'],
+                        #            tccp.dG_p[k]['dG_p_var'],
+                        #            tccp.dG_p[k]['dG_p_units'],
+                        #            tccp.dG_p[k]['dG_p_lb'],
+                        #            tccp.dG_p[k]['dG_p_ub'],
+                        #            True,
+                        #            None);
+                        #    self.session.add(row);
+                        #except sqlalchemy.exc.IntegrityError as e:
+                        #    print(e);
+                        #    print("Press any key to continue")
+                        #    a=input();
+                    #self.session.commit();
+        #add data to the DB
+        self.add_dataStage03QuantificationDG0p(dG0_p_O);
+        self.add_dataStage03QuantificationDGp(dG_p_O);
     

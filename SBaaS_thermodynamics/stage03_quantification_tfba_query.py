@@ -126,6 +126,17 @@ class stage03_quantification_tfba_query(sbaas_template_query):
             return rows_O;
         except SQLAlchemyError as e:
             print(e);
+    def add_dataStage03QuantificationSampledData(self, data_I):
+        '''add rows of data_stage03_quantification_sampledData'''
+        if data_I:
+            for d in data_I:
+                try:
+                    data_add = data_stage03_quantification_sampledData(d
+                        );
+                    self.session.add(data_add);
+                except SQLAlchemyError as e:
+                    print(e);
+            self.session.commit();
 
     ##  Query from data_stage03_quantification_sampledPoints
     # query rows from data_stage03_quantification_sampledPoints
@@ -149,3 +160,14 @@ class stage03_quantification_tfba_query(sbaas_template_query):
             return rows_O;
         except SQLAlchemyError as e:
             print(e);
+    def add_dataStage03QuantificationSampledPoints(self, data_I):
+        '''add rows of data_stage03_quantification_sampledPoints'''
+        if data_I:
+            for d in data_I:
+                try:
+                    data_add = data_stage03_quantification_sampledPoints(d
+                        );
+                    self.session.add(data_add);
+                except SQLAlchemyError as e:
+                    print(e);
+            self.session.commit();

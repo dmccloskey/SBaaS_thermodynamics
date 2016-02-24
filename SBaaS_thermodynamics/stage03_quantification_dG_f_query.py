@@ -142,36 +142,38 @@ class stage03_quantification_dG_f_query(sbaas_template_query):
         except SQLAlchemyError as e:
             print(e);
 
-    def add_dataStage03dGf(self, data_I):
+    def add_dataStage03QuantificationDGf(self, data_I):
         '''add rows of data_stage03_quantification_dG_f'''
         if data_I:
             for d in data_I:
                 try:
-                    data_add = data_stage03_quantification_dG_f(d['experiment_id'],
-                        d['model_id'],
-                        d['sample_name_abbreviation'],
-                        d['time_point'],
-                        d['met_name'],
-                        d['met_id'],
-                        d['dG_f'],
-                        d['dG_f_units'],
-                        d['dG_f_lb'],
-                        d['dG_f_ub'],
-                        d['temperature'],
-                        d['temperature_units'],
-                        d['ionic_strength'],
-                        d['ionic_strength_units'],
-                        d['pH'],
-                        d['pH_units'],
-                        d['measured'],
-                        d['used_'],
-                        d['comment_']);
+                    data_add = data_stage03_quantification_dG_f(d
+                        #d['experiment_id'],
+                        #d['model_id'],
+                        #d['sample_name_abbreviation'],
+                        #d['time_point'],
+                        #d['met_name'],
+                        #d['met_id'],
+                        #d['dG_f'],
+                        #d['dG_f_units'],
+                        #d['dG_f_lb'],
+                        #d['dG_f_ub'],
+                        #d['temperature'],
+                        #d['temperature_units'],
+                        #d['ionic_strength'],
+                        #d['ionic_strength_units'],
+                        #d['pH'],
+                        #d['pH_units'],
+                        #d['measured'],
+                        #d['used_'],
+                        #d['comment_']
+                        );
                     self.session.add(data_add);
                 except SQLAlchemyError as e:
                     print(e);
             self.session.commit();
 
-    def update_dataStage03dGf(self,data_I):
+    def update_dataStage03QuantificationDGf(self,data_I):
         #Not yet tested
         '''update rows of data_stage03_quantification_dG_f'''
         if data_I:
@@ -203,7 +205,7 @@ class stage03_quantification_dG_f_query(sbaas_template_query):
                     print(e);
             self.session.commit();
 
-    def add_dataStage03dG0f(self, data_I):
+    def add_dataStage03QuantificationDG0f(self, data_I):
         '''add rows of data_stage03_quantification_dG0_f'''
         if data_I:
             #for d in data_I:
@@ -250,7 +252,7 @@ class stage03_quantification_dG_f_query(sbaas_template_query):
                         print(e);
             self.session.commit();
 
-    def update_dataStage03dG0f(self,data_I):
+    def update_dataStage03QuantificationDG0f(self,data_I):
         #Not yet tested
         '''update rows of data_stage03_quantification_dG0_f'''
         if data_I:

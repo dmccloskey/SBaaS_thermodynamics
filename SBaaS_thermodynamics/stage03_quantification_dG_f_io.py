@@ -9,36 +9,36 @@ from io_utilities.base_exportData import base_exportData
 
 class stage03_quantification_dG_f_io(stage03_quantification_dG_f_query,sbaas_template_io):
             
-    def import_dataStage03dGf_add(self, filename):
+    def import_dataStage03QuantificationDGf_add(self, filename):
         '''table adds'''
         data = base_importData();
         data.read_csv(filename);
         data.format_data();
-        self.add_dataStage03dGf(data.data);
+        self.add_dataStage03QuantificationDGf(data.data);
         data.clear_data();
 
-    def import_dataStage03dGf_update(self, filename):
+    def import_dataStage03QuantificationDGf_update(self, filename):
         '''table adds'''
         data = base_importData();
         data.read_csv(filename);
         data.format_data();
-        self.update_dataStage03dGf(data.data);
+        self.update_dataStage03QuantificationDGf(data.data);
         data.clear_data();
 
-    def import_dataStage03dG0f_add(self, filename):
+    def import_dataStage03QuantificationDG0f_add(self, filename):
         '''table adds'''
         data = base_importData();
         #data.read_csv(filename);
         data.read_json(filename);
         #data.format_data();
-        self.add_dataStage03dG0f(data.data);
+        self.add_dataStage03QuantificationDG0f(data.data);
         #data.clear_data();
 
-    def import_dataStage03dG0f_update(self, filename):
+    def import_dataStage03QuantificationDG0f_update(self, filename):
         '''table adds'''
         data = base_importData();
         data.read_csv(filename);
         data.format_data();
-        self.update_dataStage03dG0f(data.data);
+        self.update_dataStage03QuantificationDG0f(data.data);
         data.clear_data();
    

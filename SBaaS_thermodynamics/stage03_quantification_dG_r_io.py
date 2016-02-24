@@ -24,60 +24,60 @@ class stage03_quantification_dG_r_io(stage03_quantification_dG_r_query,
                                      models_escherMaps_query,
                                      sbaas_template_io):
             
-    def import_dataStage03dG0r_add(self, filename):
+    def import_dataStage03QuantificationDG0r_add(self, filename):
         '''table adds'''
         data = base_importData();
         data.read_csv(filename);
         data.format_data();
-        self.add_dataStage03dG0r(data.data);
+        self.add_dataStage03QuantificationDG0r(data.data);
         data.clear_data();
 
-    def import_dataStage03dG0r_update(self, filename):
+    def import_dataStage03QuantificationDG0r_update(self, filename):
         '''table adds'''
         data = base_importData();
         data.read_csv(filename);
         data.format_data();
-        self.update_dataStage03dG0r(data.data);
+        self.update_dataStage03QuantificationDG0r(data.data);
         data.clear_data();
 
-    def import_dataStage03dGr_add(self, filename):
+    def import_dataStage03QuantificationDGr_add(self, filename):
         '''table adds'''
         data = base_importData();
         data.read_csv(filename);
         data.format_data();
-        self.add_dataStage03dGr(data.data);
+        self.add_dataStage03QuantificationDGr(data.data);
         data.clear_data();
 
-    def import_dataStage03dGr_update(self, filename):
+    def import_dataStage03QuantificationDGr_update(self, filename):
         '''table adds'''
         data = base_importData();
         data.read_csv(filename);
         data.format_data();
-        self.update_dataStage03dGr(data.data);
+        self.update_dataStage03QuantificationDGr(data.data);
         data.clear_data();
             
-    def import_dataStage03dGf_add(self, filename):
+    def import_dataStage03QuantificationDGf_add(self, filename):
         '''table adds'''
         data = base_importData();
         data.read_csv(filename);
         data.format_data();
-        self.add_dataStage03dGf(data.data);
+        self.add_dataStage03QuantificationDGf(data.data);
         data.clear_data();
 
-    def import_dataStage03tcc_add(self, filename):
+    def import_dataStage03QuantificationTcc_add(self, filename):
         '''table adds'''
         data = base_importData();
         data.read_csv(filename);
         data.format_data();
-        self.add_dataStage03tcc(data.data);
+        self.add_dataStage03QuantificationTcc(data.data);
         data.clear_data();
 
-    def import_dataStage03tcc_update(self, filename):
+    def import_dataStage03QuantificationTcc_update(self, filename):
         '''table adds'''
         data = base_importData();
         data.read_csv(filename);
         data.format_data();
-        self.update_dataStage03tcc(data.data);
+        self.update_dataStage03QuantificationTcc(data.data);
         data.clear_data();
 
     def export_thermodynamicAnalysisEscher_js(self,analysis_id_I,simulation_id_I=None,

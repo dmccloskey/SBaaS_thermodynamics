@@ -475,31 +475,33 @@ class stage03_quantification_dG_r_query(sbaas_template_query):
                     print(e);
             self.session.commit();
 
-    def add_dataStage03dG0r(self, data_I):
+    def add_dataStage03QuantificationDG0r(self, data_I):
         '''add rows of data_stage03_quantification_dG0_r'''
         if data_I:
             for d in data_I:
                 try:
-                    data_add = data_stage03_quantification_dG0_r(d['experiment_id'],
-                        d['model_id'],
-                        d['sample_name_abbreviation'],
-                        d['time_point'],
-                        d['rxn_id'],
-                        d['Keq_lb'],
-                        d['Keq_ub'],
-                        d['dG0_r'],
-                        d['dG0_r_var'],
-                        d['dG0_r_units'],
-                        d['dG0_r_lb'],
-                        d['dG0_r_ub'],
-                        d['used_'],
-                        d['comment_']);
+                    data_add = data_stage03_quantification_dG0_r(d
+                        #d['experiment_id'],
+                        #d['model_id'],
+                        #d['sample_name_abbreviation'],
+                        #d['time_point'],
+                        #d['rxn_id'],
+                        #d['Keq_lb'],
+                        #d['Keq_ub'],
+                        #d['dG0_r'],
+                        #d['dG0_r_var'],
+                        #d['dG0_r_units'],
+                        #d['dG0_r_lb'],
+                        #d['dG0_r_ub'],
+                        #d['used_'],
+                        #d['comment_']
+                        );
                     self.session.add(data_add);
                 except SQLAlchemyError as e:
                     print(e);
             self.session.commit();
 
-    def update_dataStage03dG0r(self,data_I):
+    def update_dataStage03QuantificationDG0r(self,data_I):
         #Not yet tested
         '''update rows of data_stage03_quantification_dG0_r'''
         if data_I:
@@ -526,35 +528,37 @@ class stage03_quantification_dG_r_query(sbaas_template_query):
                     print(e);
             self.session.commit();
 
-    def add_dataStage03dGr(self, data_I):
+    def add_dataStage03QuantificationDGr(self, data_I):
         '''add rows of data_stage03_quantification_dG_r'''
         if data_I:
             for d in data_I:
                 try:
-                    data_add = data_stage03_quantification_dG_r(d['experiment_id'],
-                        d['model_id'],
-                        d['sample_name_abbreviation'],
-                        d['time_point'],
-                        d['rxn_id'],
-                        d['Keq_lb'],
-                        d['Keq_ub'],
-                        d['dG_r'],
-                        d['dG_r_var'],
-                        d['dG_r_units'],
-                        d['dG_r_lb'],
-                        d['dG_r_ub'],
-                        d['displacement_lb'],
-                        d['displacement_ub'],
-                        d['Q_lb'],
-                        d['Q_ub'],
-                        d['used_'],
-                        d['comment_']);
+                    data_add = data_stage03_quantification_dG_r(d
+                        #d['experiment_id'],
+                        #d['model_id'],
+                        #d['sample_name_abbreviation'],
+                        #d['time_point'],
+                        #d['rxn_id'],
+                        #d['Keq_lb'],
+                        #d['Keq_ub'],
+                        #d['dG_r'],
+                        #d['dG_r_var'],
+                        #d['dG_r_units'],
+                        #d['dG_r_lb'],
+                        #d['dG_r_ub'],
+                        #d['displacement_lb'],
+                        #d['displacement_ub'],
+                        #d['Q_lb'],
+                        #d['Q_ub'],
+                        #d['used_'],
+                        #d['comment_']
+                        );
                     self.session.add(data_add);
                 except SQLAlchemyError as e:
                     print(e);
             self.session.commit();
 
-    def update_dataStage03dGr(self,data_I):
+    def update_dataStage03QuantificationDGr(self,data_I):
         #Not yet tested
         '''update rows of data_stage03_quantification_dG_r'''
         if data_I:
@@ -585,29 +589,31 @@ class stage03_quantification_dG_r_query(sbaas_template_query):
                     print(e);
             self.session.commit();
 
-    def add_dataStage03tcc(self, data_I):
+    def add_dataStage03QuantificationTcc(self, data_I):
         '''add rows of data_stage03_quantification_tcc'''
         if data_I:
             for d in data_I:
                 try:
-                    data_add = data_stage03_quantification_tcc(d['experiment_id'],
-                    d['model_id'],
-                    d['sample_name_abbreviation'],
-                    d['time_point'],
-                    d['rxn_id'],
-                    d['feasible'],
-                    d['measured_concentration_coverage_criteria'],
-                    d['measured_dG_f_coverage_criteria'],
-                    d['measured_concentration_coverage'],
-                    d['measured_dG_f_coverage'],
-                    d['used_'],
-                    d['comment_']);
+                    data_add = data_stage03_quantification_tcc(d
+                    #d['experiment_id'],
+                    #d['model_id'],
+                    #d['sample_name_abbreviation'],
+                    #d['time_point'],
+                    #d['rxn_id'],
+                    #d['feasible'],
+                    #d['measured_concentration_coverage_criteria'],
+                    #d['measured_dG_f_coverage_criteria'],
+                    #d['measured_concentration_coverage'],
+                    #d['measured_dG_f_coverage'],
+                    #d['used_'],
+                    #d['comment_']
+                    );
                     self.session.add(data_add);
                 except SQLAlchemyError as e:
                     print(e);
             self.session.commit();
 
-    def update_dataStage03tcc(self,data_I):
+    def update_dataStage03QuantificationTcc(self,data_I):
         #Not yet tested
         '''update rows of data_stage03_quantification_tcc'''
         if data_I:

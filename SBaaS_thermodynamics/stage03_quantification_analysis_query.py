@@ -43,10 +43,11 @@ class stage03_quantification_analysis_query(sbaas_template_query):
         if data_I:
             for d in data_I:
                 try:
-                    data_add = data_stage03_quantification_analysis(
-                            d['analysis_id'],d['simulation_id'],
-                            d['used_'],
-                            d['comment_']);
+                    data_add = data_stage03_quantification_analysis(d
+                            #d['analysis_id'],d['simulation_id'],
+                            #d['used_'],
+                            #d['comment_']
+                            );
                     self.session.add(data_add);
                 except SQLAlchemyError as e:
                     print(e);

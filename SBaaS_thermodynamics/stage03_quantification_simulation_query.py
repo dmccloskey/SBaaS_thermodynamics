@@ -164,15 +164,16 @@ class stage03_quantification_simulation_query(sbaas_template_query):
         if data_I:
             for d in data_I:
                 try:
-                    data_add = data_stage03_quantification_simulation(
-                        d['simulation_id'],
-                        d['experiment_id'],
-                        d['model_id'],
-                        d['sample_name_abbreviation'],
-                        d['time_point'],
-                        d['simulation_type'],
-                        d['used_'],
-                        d['comment_']);
+                    data_add = data_stage03_quantification_simulation(d
+                        #d['simulation_id'],
+                        #d['experiment_id'],
+                        #d['model_id'],
+                        #d['sample_name_abbreviation'],
+                        #d['time_point'],
+                        #d['simulation_type'],
+                        #d['used_'],
+                        #d['comment_']
+                        );
                     self.session.add(data_add);
                 except SQLAlchemyError as e:
                     print(e);
@@ -204,18 +205,19 @@ class stage03_quantification_simulation_query(sbaas_template_query):
         if data_I:
             for d in data_I:
                 try:
-                    data_add = data_stage03_quantification_simulationParameters(
-                        d['simulation_id'],
-                        #None, #d['simulation_dateAndTime'],
-                        d['solver_id'],
-                        d['n_points'],
-                        d['n_steps'],
-                        d['max_time'],
-                        d['sampler_id'],
-                        #None,
-                        #None,
-                        d['used_'],
-                        d['comment_']);
+                    data_add = data_stage03_quantification_simulationParameters(d
+                        #d['simulation_id'],
+                        ##None, #d['simulation_dateAndTime'],
+                        #d['solver_id'],
+                        #d['n_points'],
+                        #d['n_steps'],
+                        #d['max_time'],
+                        #d['sampler_id'],
+                        ##None,
+                        ##None,
+                        #d['used_'],
+                        #d['comment_']
+                        );
                     self.session.add(data_add);
                 except SQLAlchemyError as e:
                     print(e);

@@ -5,11 +5,6 @@ from .stage03_quantification_dG_f_query import stage03_quantification_dG_f_query
 from .stage03_quantification_simulatedData_query import stage03_quantification_simulatedData_query
 from .stage03_quantification_otherData_query import stage03_quantification_otherData_query
 from .stage03_quantification_simulation_query import stage03_quantification_simulation_query
-#SBaaS models (delete if not needed)
-from .stage03_quantification_dG_r_postgresql_models import *
-# Resources (delete if not needed)
-from io_utilities.base_importData import base_importData
-from io_utilities.base_exportData import base_exportData
 # Dependencies from thermodynamics
 from thermodynamics.thermodynamics_dG_f_data import thermodynamics_dG_f_data
 from thermodynamics.thermodynamics_dG_r_data import thermodynamics_dG_r_data
@@ -30,7 +25,9 @@ class stage03_quantification_dG_r_execute(stage03_quantification_dG_r_io,
                             measured_dG_f_coverage_criteria_I=0.99):
 
         '''calculate dG0_r, dG_r, displacements, and perform a thermodynamic consistency check'''
-        
+        dG0_r_O = [];
+        dG_r_O = [];
+        tcc_O = [];
         # get the model ids:
         if model_ids_I:
             model_ids = model_ids_I;
@@ -113,6 +110,7 @@ class stage03_quantification_dG_r_execute(stage03_quantification_dG_r_io,
                                 'dG0_r_ub':tcc.dG0_r[k]['dG_r_ub'],
                                 'used_':True,
                                 'comment_':None};
+                        dG0_r_O.append(dG0_r_tmp);
                         dG_r_tmp = {'experiment_id':experiment_id_I,
                                 'model_id':model_id,
                                 'sample_name_abbreviation':sna,
@@ -131,6 +129,7 @@ class stage03_quantification_dG_r_execute(stage03_quantification_dG_r_io,
                                 'Q_ub':tcc.displacement[k]['Q_ub'],
                                 'used_':True,
                                 'comment_':None};
+                        dG_r_O.append(dG_r_tmp);
                         tcc_tmp = {'experiment_id':experiment_id_I,
                                 'model_id':model_id,
                                 'sample_name_abbreviation':sna,
@@ -143,62 +142,67 @@ class stage03_quantification_dG_r_execute(stage03_quantification_dG_r_io,
                                 'measured_dG_f_coverage':tcc.dG_r_coverage[k],
                                 'used_':True,
                                 'comment_':None};
-                        try:
-                            row = None;
-                            row = data_stage03_quantification_dG0_r(experiment_id_I,
-                                    model_id,
-                                    sna,
-                                    tp,
-                                    k,
-                                    tcc.dG0_r[k]['Keq_lb'],
-                                    tcc.dG0_r[k]['Keq_ub'],
-                                    tcc.dG0_r[k]['dG_r'],
-                                    tcc.dG0_r[k]['dG_r_var'],
-                                    tcc.dG0_r[k]['dG_r_units'],
-                                    tcc.dG0_r[k]['dG_r_lb'],
-                                    tcc.dG0_r[k]['dG_r_ub'],
-                                    True,
-                                    None);
-                            self.session.add(row);
-                            row = None;
-                            row = data_stage03_quantification_dG_r(experiment_id_I,
-                                    model_id,
-                                    sna,
-                                    tp,
-                                    k,
-                                    tcc.dG_r[k]['Keq_lb'],
-                                    tcc.dG_r[k]['Keq_ub'],
-                                    tcc.dG_r[k]['dG_r'],
-                                    tcc.dG_r[k]['dG_r_var'],
-                                    tcc.dG_r[k]['dG_r_units'],
-                                    tcc.dG_r[k]['dG_r_lb'],
-                                    tcc.dG_r[k]['dG_r_ub'],
-                                    tcc.displacement[k]['displacement_lb'],
-                                    tcc.displacement[k]['displacement_ub'],
-                                    tcc.displacement[k]['Q_lb'],
-                                    tcc.displacement[k]['Q_ub'],
-                                    True,
-                                    None);
-                            self.session.add(row);
-                            row = None;
-                            row = data_stage03_quantification_tcc(experiment_id_I,
-                                    model_id,
-                                    sna,
-                                    tp,
-                                    k,
-                                    tcc.thermodynamic_consistency_check[k],
-                                    measured_concentration_coverage_criteria_I,
-                                    measured_dG_f_coverage_criteria_I,
-                                    tcc.metabolomics_coverage[k],
-                                    tcc.dG_r_coverage[k],
-                                    True,
-                                    None);
-                            self.session.add(row);
-                        except sqlalchemy.exc.IntegrityError as e:
-                            print(e);
-                            print("Press any key to continue")
-                            a=input();
-                    self.session.commit();  
+                        tcc_O.append(tcc_tmp);
+                        #try:
+                        #    row = None;
+                        #    row = data_stage03_quantification_dG0_r(experiment_id_I,
+                        #            model_id,
+                        #            sna,
+                        #            tp,
+                        #            k,
+                        #            tcc.dG0_r[k]['Keq_lb'],
+                        #            tcc.dG0_r[k]['Keq_ub'],
+                        #            tcc.dG0_r[k]['dG_r'],
+                        #            tcc.dG0_r[k]['dG_r_var'],
+                        #            tcc.dG0_r[k]['dG_r_units'],
+                        #            tcc.dG0_r[k]['dG_r_lb'],
+                        #            tcc.dG0_r[k]['dG_r_ub'],
+                        #            True,
+                        #            None);
+                        #    self.session.add(row);
+                        #    row = None;
+                        #    row = data_stage03_quantification_dG_r(experiment_id_I,
+                        #            model_id,
+                        #            sna,
+                        #            tp,
+                        #            k,
+                        #            tcc.dG_r[k]['Keq_lb'],
+                        #            tcc.dG_r[k]['Keq_ub'],
+                        #            tcc.dG_r[k]['dG_r'],
+                        #            tcc.dG_r[k]['dG_r_var'],
+                        #            tcc.dG_r[k]['dG_r_units'],
+                        #            tcc.dG_r[k]['dG_r_lb'],
+                        #            tcc.dG_r[k]['dG_r_ub'],
+                        #            tcc.displacement[k]['displacement_lb'],
+                        #            tcc.displacement[k]['displacement_ub'],
+                        #            tcc.displacement[k]['Q_lb'],
+                        #            tcc.displacement[k]['Q_ub'],
+                        #            True,
+                        #            None);
+                        #    self.session.add(row);
+                        #    row = None;
+                        #    row = data_stage03_quantification_tcc(experiment_id_I,
+                        #            model_id,
+                        #            sna,
+                        #            tp,
+                        #            k,
+                        #            tcc.thermodynamic_consistency_check[k],
+                        #            measured_concentration_coverage_criteria_I,
+                        #            measured_dG_f_coverage_criteria_I,
+                        #            tcc.metabolomics_coverage[k],
+                        #            tcc.dG_r_coverage[k],
+                        #            True,
+                        #            None);
+                        #    self.session.add(row);
+                        #except sqlalchemy.exc.IntegrityError as e:
+                        #    print(e);
+                        #    print("Press any key to continue")
+                        #    a=input();
+                    #self.session.commit();  
+        # add datat to the DB
+        self.add_dataStage03QuantificationDG0r(dG0_r_O);
+        self.add_dataStage03QuantificationDGr(dG_r_O);
+        self.add_dataStage03QuantificationTcc(tcc_O);
     def execute_simulateInfeasibleReactions(self,experiment_id_I,models_I,model_ids_I = [],
                             time_points_I=[],sample_name_abbreviations_I=[],constrain_infeasibleReactions_I=False):
 

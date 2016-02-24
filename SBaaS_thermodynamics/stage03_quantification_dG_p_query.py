@@ -21,31 +21,45 @@ class stage03_quantification_dG_p_query(sbaas_template_query):
             };
         self.set_supportedTables(tables_supported);
 
-    def add_dataStage03dGp(self, data_I):
+    def add_dataStage03QuantificationDGp(self, data_I):
         '''add rows of data_stage03_quantification_dG_p'''
         if data_I:
             for d in data_I:
                 try:
-                    data_add = data_stage03_quantification_dG_p(d['experiment_id'],
-                        d['model_id'],
-                        d['sample_name_abbreviation'],
-                        d['time_point'],
-                        d['pathway_id'],
-                        d['dG_p'],
-                        d['dG_p_var'],
-                        d['dG_p_units'],
-                        d['dG_p_lb'],
-                        d['dG_p_ub'],
-                        d['reactions'],
-                        d['stoichiometry'],
-                        d['used_'],
-                        d['comment_']);
+                    data_add = data_stage03_quantification_dG_p(d
+                        #d['experiment_id'],
+                        #d['model_id'],
+                        #d['sample_name_abbreviation'],
+                        #d['time_point'],
+                        #d['pathway_id'],
+                        #d['dG_p'],
+                        #d['dG_p_var'],
+                        #d['dG_p_units'],
+                        #d['dG_p_lb'],
+                        #d['dG_p_ub'],
+                        #d['reactions'],
+                        #d['stoichiometry'],
+                        #d['used_'],
+                        #d['comment_']
+                        );
                     self.session.add(data_add);
                 except SQLAlchemyError as e:
                     print(e);
             self.session.commit();
 
-    def update_dataStage03dGp(self,data_I):
+    def add_dataStage03QuantificationDG0p(self, data_I):
+        '''add rows of data_stage03_quantification_dG0_p'''
+        if data_I:
+            for d in data_I:
+                try:
+                    data_add = data_stage03_quantification_dG0_p(d
+                        );
+                    self.session.add(data_add);
+                except SQLAlchemyError as e:
+                    print(e);
+            self.session.commit();
+
+    def update_dataStage03QuantificationDGp(self,data_I):
         #Not yet tested
         '''update rows of data_stage03_quantification_dG_p'''
         if data_I:

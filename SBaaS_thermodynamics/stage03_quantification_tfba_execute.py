@@ -6,11 +6,6 @@ from .stage03_quantification_dG_r_query import stage03_quantification_dG_r_query
 from .stage03_quantification_otherData_query import stage03_quantification_otherData_query
 from .stage03_quantification_simulation_query import stage03_quantification_simulation_query
 from SBaaS_models.models_COBRA_dependencies import models_COBRA_dependencies
-#SBaaS models (delete if not needed)
-from .stage03_quantification_tfba_postgresql_models import *
-# Resources (delete if not needed)
-from io_utilities.base_importData import base_importData
-from io_utilities.base_exportData import base_exportData
 # Dependencies from thermodynamics
 from thermodynamics.thermodynamics_dG_f_data import thermodynamics_dG_f_data
 from thermodynamics.thermodynamics_dG_r_data import thermodynamics_dG_r_data
@@ -338,43 +333,69 @@ class stage03_quantification_tfba_execute(stage03_quantification_tfba_io,
             else:
                 print('sampler_id not recognized');
             # add data to the database
-            row = None;
-            row = data_stage03_quantification_sampledPoints(
-                simulation_id_I,
-                sampling.simulation_dateAndTime,
-                sampling.mixed_fraction,
-                data_dir_I+'/'+filename_points,
-                sampling.loops,
-                True,
-                None);
-            self.session.add(row);
+            row = {'data_dir':data_dir_I+'/'+filename_points,
+                'infeasible_loops':sampling.loops,
+                'used_':True,
+                'comment_':None
+                };
+            self.add_dataStage03QuantificationSampledPoints([row])
+            #row = None;
+            #row = data_stage03_quantification_sampledPoints(
+            #    simulation_id_I,
+            #    sampling.simulation_dateAndTime,
+            #    sampling.mixed_fraction,
+            #    data_dir_I+'/'+filename_points,
+            #    sampling.loops,
+            #    True,
+            #    None);
+            #self.session.add(row);
             # write points to json file
 
             # add data to the database
+            sampledData_O = [];
             for k,v in sampling.points_statistics.items():
                 type,units = tfba.get_variableTypeAndUnits(k);
-                row = None;
-                row = data_stage03_quantification_sampledData(
-                    simulation_id_I,
-                    sampling.simulation_dateAndTime,
-                    k,
-                    type,
-                    units,
-                    None, #v['points'],
-                    v['ave'],
-                    v['var'],
-                    v['lb'],
-                    v['ub'],
-                    v['min'],
-                    0.95,
-                    v['max'],
-                    v['median'],
-                    v['iq_1'],
-                    v['iq_3'],
-                    True,
-                    None);
-                self.session.add(row);
-            self.session.commit() 
+                row = {'simulation_id':simulation_id_I,
+                    'simulation_dateAndTime':sampling.simulation_dateAndTime,
+                    'variable_id':k,
+                    'variable_type':type,
+                    'variable_units':units,
+                    'sampling_points':None, #v['points'],
+                    'sampling_ave':v['ave'],
+                    'sampling_var':v['var'],
+                    'sampling_lb':v['lb'],
+                    'sampling_ub':v['ub'],
+                    'sampling_ci':v['min'],
+                    'sampling_min':0.95,
+                    'sampling_max':v['max'],
+                    'sampling_median':v['median'],
+                    'sampling_iq_1':v['iq_1'],
+                    'sampling_iq_3':v['iq_3'],
+                    'used_':True,
+                    'comment_':None};
+                sampledData_O.append(row);
+                #row = None;
+                #row = data_stage03_quantification_sampledData(
+                #    simulation_id_I,
+                #    sampling.simulation_dateAndTime,
+                #    k,
+                #    type,
+                #    units,
+                #    None, #v['points'],
+                #    v['ave'],
+                #    v['var'],
+                #    v['lb'],
+                #    v['ub'],
+                #    v['min'],
+                #    0.95,
+                #    v['max'],
+                #    v['median'],
+                #    v['iq_1'],
+                #    v['iq_3'],
+                #    True,
+                #    None);
+                #self.session.add(row);
+            self.add_dataStage03QuantificationSampledData(sampledData_O);
         else:
             print('no solution found!'); 
     def execute_tfba(self,simulation_id_I,models_I,
