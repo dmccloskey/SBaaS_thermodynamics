@@ -2,9 +2,24 @@
 from .stage03_quantification_tfba_postgresql_models import *
 #SBaaS base
 from SBaaS_base.sbaas_base import sbaas_base
+from SBaaS_base.sbaas_base_query_update import sbaas_base_query_update
+from SBaaS_base.sbaas_base_query_drop import sbaas_base_query_drop
+from SBaaS_base.sbaas_base_query_initialize import sbaas_base_query_initialize
+from SBaaS_base.sbaas_base_query_insert import sbaas_base_query_insert
+from SBaaS_base.sbaas_base_query_select import sbaas_base_query_select
+from SBaaS_base.sbaas_base_query_delete import sbaas_base_query_delete
+
+from SBaaS_base.sbaas_template_query import sbaas_template_query
 #other
 
-class stage03_quantification_tfba_query(sbaas_base):
+class stage03_quantification_tfba_query(sbaas_template_query):
+    def initialize_supportedTables(self):
+        '''Set the supported tables dict for ...
+        '''
+        tables_supported = {'data_stage03_quantification_sampledData':data_stage03_quantification_sampledData,
+            'data_stage03_quantification_sampledPoints':data_stage03_quantification_sampledPoints,
+            };
+        self.set_supportedTables(tables_supported);
     def drop_dataStage03_quantification_tfba(self):
         try:
             data_stage03_quantification_sampledPoints.__table__.drop(self.engine,True);

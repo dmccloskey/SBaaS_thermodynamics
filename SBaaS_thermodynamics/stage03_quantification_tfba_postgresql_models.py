@@ -1,6 +1,7 @@
 #SBaaS base
 from SBaaS_base.postgresql_orm_base import *
 
+
 class data_stage03_quantification_sampledPoints(Base):
     __tablename__ = 'data_stage03_quantification_sampledPoints'
     id = Column(Integer, Sequence('data_stage03_quantification_sampledData_id_seq'), primary_key=True)
@@ -18,14 +19,24 @@ class data_stage03_quantification_sampledPoints(Base):
     __table_args__ = (
             UniqueConstraint('simulation_id','simulation_dateAndTime'),
             )
+    
+    def __init__(self, 
+                row_dict_I,
+                ):
+        self.data_dir=data_dict_I['data_dir'];
+        self.infeasible_loops=data_dict_I['infeasible_loops'];
+        self.used_=data_dict_I['used_'];
+        self.comment_=data_dict_I['comment_'];
+        self.simulation_id=data_dict_I['simulation_id'];
+        self.simulation_dateAndTime=data_dict_I['simulation_dateAndTime'];
+        self.mixed_fraction=data_dict_I['mixed_fraction'];
 
-    def __init__(self,
-                simulation_id_I,
-                simulation_dateAndTime_I,
-                #experiment_id_I,model_id_I,
-                #sample_name_abbreviation_I,
-                mixed_fraction_I,data_dir_I,infeasible_loops_I,
-                used__I,comment__I):
+    def __set__row__(self,simulation_id_I,
+        simulation_dateAndTime_I,
+        #experiment_id_I,model_id_I,
+        #    sample_name_abbreviation_I,
+            mixed_fraction_I,data_dir_I,infeasible_loops_I,
+                 used__I,comment__I):
         self.simulation_id=simulation_id_I
         self.simulation_dateAndTime=simulation_dateAndTime_I
         #self.experiment_id=experiment_id_I
@@ -39,15 +50,15 @@ class data_stage03_quantification_sampledPoints(Base):
 
     def __repr__dict__(self):
         return {'id':self.id,
-        'simulation_id':self.simulation_id,
+                'simulation_id':self.simulation_id,
         'simulation_dateAndTime':self.simulation_dateAndTime,
         #'experiment_id':self.experiment_id,
-        #'model_id':self.model_id,
-        #'sample_name_abbreviation':self.sample_name_abbreviation,
-        'data_dir':self.data_dir,
-        'infeasible_loops':self.infeasible_loops,
-        'used_':self.used_,
-        'comment_':self.comment_}
+        #        'model_id':self.model_id,
+        #    'sample_name_abbreviation':self.sample_name_abbreviation,
+                'data_dir':self.data_dir,
+                'infeasible_loops':self.infeasible_loops,
+                'used_':self.used_,
+                'comment_':self.comment_}
     
     def __repr__json__(self):
         return json.dumps(self.__repr__dict__())
@@ -80,8 +91,30 @@ class data_stage03_quantification_sampledData(Base):
     __table_args__ = (
             UniqueConstraint('simulation_id','variable_id','variable_type'),
             )
+    
+    def __init__(self, 
+                row_dict_I,
+                ):
+        self.simulation_id=data_dict_I['simulation_id'];
+        self.simulation_dateAndTime=data_dict_I['simulation_dateAndTime'];
+        self.variable_id=data_dict_I['variable_id'];
+        self.variable_type=data_dict_I['variable_type'];
+        self.variable_units=data_dict_I['variable_units'];
+        self.sampling_points=data_dict_I['sampling_points'];
+        self.sampling_ave=data_dict_I['sampling_ave'];
+        self.sampling_var=data_dict_I['sampling_var'];
+        self.sampling_lb=data_dict_I['sampling_lb'];
+        self.sampling_ub=data_dict_I['sampling_ub'];
+        self.sampling_ci=data_dict_I['sampling_ci'];
+        self.sampling_min=data_dict_I['sampling_min'];
+        self.sampling_max=data_dict_I['sampling_max'];
+        self.sampling_median=data_dict_I['sampling_median'];
+        self.sampling_iq_1=data_dict_I['sampling_iq_1'];
+        self.sampling_iq_3=data_dict_I['sampling_iq_3'];
+        self.used_=data_dict_I['used_'];
+        self.comment_=data_dict_I['comment_'];
 
-    def __init__(self,simulation_id_I,
+    def __set__row__(self,simulation_id_I,
         simulation_dateAndTime_I,
         #experiment_id_I,model_id_I,
         #    sample_name_abbreviation_I,
@@ -163,8 +196,12 @@ class data_stage03_quantification_tfbaReactions(Base):
     tsampling_dG_r_var = Column(Float);
     used_ = Column(Boolean);
     comment_ = Column(Text);
-
-    def __init__(self,experiment_id_I):
+    
+    def __init__(self, 
+                row_dict_I,
+                ):
+        pass;
+    def __set__row__(self,experiment_id_I):
         self.experiment_id=experiment_id_I
 
     def __repr__dict__(self):
@@ -193,8 +230,12 @@ class data_stage03_quantification_tfbaMetabolites(Base):
     tsampling_dG_f_var = Column(Float);
     used_ = Column(Boolean);
     comment_ = Column(Text);
-
-    def __init__(self, experiment_id_I):
+    
+    def __init__(self, 
+                row_dict_I,
+                ):
+        pass;
+    def __set__row__(self, experiment_id_I):
         self.experiment_id = experiment_id_I;
 
     def __repr__dict__(self): 

@@ -1,14 +1,27 @@
-#LIMS
-from SBaaS_LIMS.lims_experiment_postgresql_models import *
-from SBaaS_LIMS.lims_sample_postgresql_models import *
 #SBaaS models
 from .stage03_quantification_dG_r_postgresql_models import *
 #SBaaS base
 from SBaaS_base.sbaas_base import sbaas_base
+from SBaaS_base.sbaas_base_query_update import sbaas_base_query_update
+from SBaaS_base.sbaas_base_query_drop import sbaas_base_query_drop
+from SBaaS_base.sbaas_base_query_initialize import sbaas_base_query_initialize
+from SBaaS_base.sbaas_base_query_insert import sbaas_base_query_insert
+from SBaaS_base.sbaas_base_query_select import sbaas_base_query_select
+from SBaaS_base.sbaas_base_query_delete import sbaas_base_query_delete
+
+from SBaaS_base.sbaas_template_query import sbaas_template_query
 #Resources
 #from math import copysign
 
-class stage03_quantification_dG_r_query(sbaas_base):
+class stage03_quantification_dG_r_query(sbaas_template_query):
+    def initialize_supportedTables(self):
+        '''Set the supported tables dict for data_stage03_quantification_dG_r
+        '''
+        tables_supported = {'data_stage03_quantification_dG0_r':data_stage03_quantification_dG0_r,
+            'data_stage03_quantification_dG_r':data_stage03_quantification_dG_r,
+            'data_stage03_quantification_tcc':data_stage03_quantification_tcc,
+            };
+        self.set_supportedTables(tables_supported);
     ## Query from data_stage03_quantification_dG0_r
     # query rows from data_stage03_quantificaton_dG0_r
     def get_rowsDict_experimentIDAndModelIDAndTimePointAndSampleNameAbbreviations_dataStage03QuantificationDG0r(self,experiment_id_I,
@@ -649,8 +662,6 @@ class stage03_quantification_dG_r_query(sbaas_base):
         try:
             if experiment_id_I:
                 reset = self.session.query(data_stage03_quantification_dG0_r).filter(data_stage03_quantification_dG0_r.experiment_id.like(experiment_id_I)).delete(synchronize_session=False);
-            else:
-                reset = self.session.query(data_stage03_quantification_dG0_r).delete(synchronize_session=False);
             self.session.commit();
         except SQLAlchemyError as e:
             print(e);

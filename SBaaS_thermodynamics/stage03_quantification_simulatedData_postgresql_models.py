@@ -19,8 +19,23 @@ class data_stage03_quantification_simulatedData(Base):
 
     __table_args__ = (UniqueConstraint('experiment_id','model_id','rxn_id'),
             )
+    
+    def __init__(self, 
+                row_dict_I,
+                ):
+        self.fva_maximum=data_dict_I['fva_maximum'];
+        self.flux_units=data_dict_I['flux_units'];
+        self.sra_gr=data_dict_I['sra_gr'];
+        self.used_=data_dict_I['used_'];
+        self.sra_gr_ratio=data_dict_I['sra_gr_ratio'];
+        self.comment_=data_dict_I['comment_'];
+        self.experiment_id=data_dict_I['experiment_id'];
+        self.model_id=data_dict_I['model_id'];
+        self.rxn_id=data_dict_I['rxn_id'];
+        self.fba_flux=data_dict_I['fba_flux'];
+        self.fva_minimum=data_dict_I['fva_minimum'];
 
-    def __init__(self,experiment_id_I,model_id_I,
+    def __set__row__(self,experiment_id_I,model_id_I,
                  #sample_name_abbreviation_I,
                  #time_point_I,
                  rxn_id_I,fba_flux_I,

@@ -5,8 +5,22 @@ from SBaaS_LIMS.lims_sample_postgresql_models import *
 from .stage03_quantification_analysis_postgresql_models import *
 
 from SBaaS_base.sbaas_base import sbaas_base
+from SBaaS_base.sbaas_base_query_update import sbaas_base_query_update
+from SBaaS_base.sbaas_base_query_drop import sbaas_base_query_drop
+from SBaaS_base.sbaas_base_query_initialize import sbaas_base_query_initialize
+from SBaaS_base.sbaas_base_query_insert import sbaas_base_query_insert
+from SBaaS_base.sbaas_base_query_select import sbaas_base_query_select
+from SBaaS_base.sbaas_base_query_delete import sbaas_base_query_delete
 
-class stage03_quantification_analysis_query(sbaas_base):
+from SBaaS_base.sbaas_template_query import sbaas_template_query
+
+class stage03_quantification_analysis_query(sbaas_template_query):
+    def initialize_supportedTables(self):
+        '''Set the supported tables dict for data_stage03_quantification_analysis
+        '''
+        tables_supported = {'data_stage03_quantification_analysis':data_stage03_quantification_analysis
+            };
+        self.set_supportedTables(tables_supported);
     ## Query from data_stage03_quantification_analysis
     # query simulation_id
     def get_simulationID_analysisID_dataStage03QuantificationAnalysis(self,analysis_id_I):

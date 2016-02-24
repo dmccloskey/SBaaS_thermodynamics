@@ -52,10 +52,6 @@
     <Compile Include="stage03_quantification_otherData_io.py" />
     <Compile Include="stage03_quantification_otherData_postgresql_models.py" />
     <Compile Include="stage03_quantification_otherData_query.py" />
-    <Compile Include="stage03_quantification_sampledData_execute.py" />
-    <Compile Include="stage03_quantification_sampledData_io.py" />
-    <Compile Include="stage03_quantification_sampledData_postgresql_models.py" />
-    <Compile Include="stage03_quantification_sampledData_query.py" />
     <Compile Include="stage03_quantification_simulatedData_execute.py" />
     <Compile Include="stage03_quantification_simulatedData_io.py" />
     <Compile Include="stage03_quantification_simulatedData_postgresql_models.py" />

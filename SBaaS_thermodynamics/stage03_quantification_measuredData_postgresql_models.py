@@ -18,8 +18,24 @@ class data_stage03_quantification_metabolomicsData(Base):
 
     __table_args__ = (UniqueConstraint('experiment_id','sample_name_abbreviation','time_point','met_id'),
             )
+    
+    def __init__(self, 
+                row_dict_I,
+                ):
+        self.used_=data_dict_I['used_'];
+        self.experiment_id=data_dict_I['experiment_id'];
+        self.sample_name_abbreviation=data_dict_I['sample_name_abbreviation'];
+        self.time_point=data_dict_I['time_point'];
+        self.met_id=data_dict_I['met_id'];
+        self.concentration=data_dict_I['concentration'];
+        self.concentration_var=data_dict_I['concentration_var'];
+        self.concentration_units=data_dict_I['concentration_units'];
+        self.concentration_lb=data_dict_I['concentration_lb'];
+        self.concentration_ub=data_dict_I['concentration_ub'];
+        self.measured=data_dict_I['measured'];
+        self.comment_=data_dict_I['comment_'];
 
-    def __init__(self, experiment_id_I, sample_name_abbreviation_I,
+    def __set__row__(self, experiment_id_I, sample_name_abbreviation_I,
                  time_point_I, met_id_I,
                  concentration_I, concentration_var_I, concentration_units_I, concentration_lb_I,
                  concentration_ub_I,
@@ -74,8 +90,24 @@ class data_stage03_quantification_measuredFluxes(Base):
     __table_args__ = (
             UniqueConstraint('experiment_id','sample_name_abbreviation','rxn_id','model_id','time_point'),
             )
+    
+    def __init__(self, 
+                row_dict_I,
+                ):
+        self.used_=data_dict_I['used_'];
+        self.id=data_dict_I['id'];
+        self.experiment_id=data_dict_I['experiment_id'];
+        self.model_id=data_dict_I['model_id'];
+        self.sample_name_abbreviation=data_dict_I['sample_name_abbreviation'];
+        self.rxn_id=data_dict_I['rxn_id'];
+        self.flux_average=data_dict_I['flux_average'];
+        self.flux_stdev=data_dict_I['flux_stdev'];
+        self.flux_lb=data_dict_I['flux_lb'];
+        self.flux_ub=data_dict_I['flux_ub'];
+        self.flux_units=data_dict_I['flux_units'];
+        self.comment_=data_dict_I['comment_'];
 
-    def __init__(self,experiment_id_I,
+    def __set__row__(self,experiment_id_I,
             model_id_I,
             sample_name_abbreviation_I,
             time_point_I,

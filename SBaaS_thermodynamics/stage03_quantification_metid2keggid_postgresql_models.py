@@ -11,8 +11,17 @@ class data_stage03_quantification_metid2keggid(Base):
 
     __table_args__ = (UniqueConstraint('id'),
             )
+    
+    def __init__(self, 
+                row_dict_I,
+                ):
+        self.id=data_dict_I['id'];
+        self.met_id=data_dict_I['met_id'];
+        self.KEGG_id=data_dict_I['KEGG_id'];
+        self.used_=data_dict_I['used_'];
+        self.comment_=data_dict_I['comment_'];
 
-    def __init__(self, met_id_I, KEGG_id_I, used_I, comment_I):
+    def __set__row__(self, met_id_I, KEGG_id_I, used_I, comment_I):
         self.met_id = met_id_I;
         self.KEGG_id = KEGG_id_I;
         self.used_ = used_I;

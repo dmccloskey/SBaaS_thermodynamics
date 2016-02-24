@@ -7,6 +7,7 @@ from .stage03_quantification_analysis_query import stage03_quantification_analys
 from .stage03_quantification_simulation_query import stage03_quantification_simulation_query
 from .stage03_quantification_measuredData_query import stage03_quantification_measuredData_query
 from SBaaS_models.models_escherMaps_query import models_escherMaps_query
+from SBaaS_base.sbaas_template_io import sbaas_template_io
 # Resources
 from io_utilities.base_importData import base_importData
 from io_utilities.base_exportData import base_exportData
@@ -20,7 +21,8 @@ class stage03_quantification_dG_r_io(stage03_quantification_dG_r_query,
                                      stage03_quantification_analysis_query,
                                      stage03_quantification_simulation_query,
                                      stage03_quantification_measuredData_query,
-                                     models_escherMaps_query):
+                                     models_escherMaps_query,
+                                     sbaas_template_io):
             
     def import_dataStage03dG0r_add(self, filename):
         '''table adds'''

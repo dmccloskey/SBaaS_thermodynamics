@@ -20,8 +20,26 @@ class data_stage03_quantification_dG0_r(Base):
 
     __table_args__ = (UniqueConstraint('experiment_id','model_id','sample_name_abbreviation','time_point','rxn_id'),
             )
+    
+    def __init__(self, 
+                row_dict_I,
+                ):
+        self.comment_=data_dict_I['comment_'];
+        self.experiment_id=data_dict_I['experiment_id'];
+        self.model_id=data_dict_I['model_id'];
+        self.sample_name_abbreviation=data_dict_I['sample_name_abbreviation'];
+        self.time_point=data_dict_I['time_point'];
+        self.rxn_id=data_dict_I['rxn_id'];
+        self.Keq_lb=data_dict_I['Keq_lb'];
+        self.Keq_ub=data_dict_I['Keq_ub'];
+        self.dG0_r=data_dict_I['dG0_r'];
+        self.dG0_r_var=data_dict_I['dG0_r_var'];
+        self.dG0_r_units=data_dict_I['dG0_r_units'];
+        self.dG0_r_lb=data_dict_I['dG0_r_lb'];
+        self.dG0_r_ub=data_dict_I['dG0_r_ub'];
+        self.used_=data_dict_I['used_'];
 
-    def __init__(self,experiment_id_I,model_id_I,sample_name_abbreviation_I,
+    def __set__row__(self,experiment_id_I,model_id_I,sample_name_abbreviation_I,
                  time_point_I,rxn_id_I,Keq_lb_I,Keq_ub_I,
                  dG0_r_I,dG0_r_var_I,dG0_r_units_I,dG0_r_lb_I,
                  dG0_r_ub_I,used_I,comment_I):
@@ -85,8 +103,30 @@ class data_stage03_quantification_dG_r(Base):
 
     __table_args__ = (UniqueConstraint('experiment_id','model_id','sample_name_abbreviation','time_point','rxn_id'),
             )
+    
+    def __init__(self, 
+                row_dict_I,
+                ):
+        self.Q_lb=data_dict_I['Q_lb'];
+        self.Keq_lb=data_dict_I['Keq_lb'];
+        self.Keq_ub=data_dict_I['Keq_ub'];
+        self.dG_r=data_dict_I['dG_r'];
+        self.dG_r_var=data_dict_I['dG_r_var'];
+        self.dG_r_units=data_dict_I['dG_r_units'];
+        self.dG_r_lb=data_dict_I['dG_r_lb'];
+        self.dG_r_ub=data_dict_I['dG_r_ub'];
+        self.displacement_lb=data_dict_I['displacement_lb'];
+        self.displacement_ub=data_dict_I['displacement_ub'];
+        self.comment_=data_dict_I['comment_'];
+        self.used_=data_dict_I['used_'];
+        self.Q_ub=data_dict_I['Q_ub'];
+        self.rxn_id=data_dict_I['rxn_id'];
+        self.experiment_id=data_dict_I['experiment_id'];
+        self.model_id=data_dict_I['model_id'];
+        self.sample_name_abbreviation=data_dict_I['sample_name_abbreviation'];
+        self.time_point=data_dict_I['time_point'];
 
-    def __init__(self,experiment_id_I,
+    def __set__row__(self,experiment_id_I,
                     model_id_I,
                     sample_name_abbreviation_I,
                     time_point_I,
@@ -165,8 +205,24 @@ class data_stage03_quantification_tcc(Base):
 
     __table_args__ = (UniqueConstraint('experiment_id','sample_name_abbreviation','time_point','rxn_id'),
             )
+    
+    def __init__(self, 
+                row_dict_I,
+                ):
+        self.comment_=data_dict_I['comment_'];
+        self.experiment_id=data_dict_I['experiment_id'];
+        self.model_id=data_dict_I['model_id'];
+        self.sample_name_abbreviation=data_dict_I['sample_name_abbreviation'];
+        self.time_point=data_dict_I['time_point'];
+        self.rxn_id=data_dict_I['rxn_id'];
+        self.feasible=data_dict_I['feasible'];
+        self.measured_concentration_coverage_criteria=data_dict_I['measured_concentration_coverage_criteria'];
+        self.measured_dG_f_coverage_criteria=data_dict_I['measured_dG_f_coverage_criteria'];
+        self.measured_concentration_coverage=data_dict_I['measured_concentration_coverage'];
+        self.measured_dG_f_coverage=data_dict_I['measured_dG_f_coverage'];
+        self.used_=data_dict_I['used_'];
 
-    def __init__(self,experiment_id_I, model_id_I,sample_name_abbreviation_I,
+    def __set__row__(self,experiment_id_I, model_id_I,sample_name_abbreviation_I,
                 time_point_I,rxn_id_I,feasible_I,
                 measured_concentration_coverage_criteria_I,measured_dG_f_coverage_criteria_I,
                 measured_concentration_coverage_I,measured_dG_f_coverage_I,

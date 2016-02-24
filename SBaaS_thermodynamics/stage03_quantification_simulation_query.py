@@ -1,13 +1,25 @@
-#LIMS
-from SBaaS_LIMS.lims_experiment_postgresql_models import *
-from SBaaS_LIMS.lims_sample_postgresql_models import *
 #SBaaS models
 from .stage03_quantification_simulation_postgresql_models import *
 #SBaaS base
 from SBaaS_base.sbaas_base import sbaas_base
+from SBaaS_base.sbaas_base_query_update import sbaas_base_query_update
+from SBaaS_base.sbaas_base_query_drop import sbaas_base_query_drop
+from SBaaS_base.sbaas_base_query_initialize import sbaas_base_query_initialize
+from SBaaS_base.sbaas_base_query_insert import sbaas_base_query_insert
+from SBaaS_base.sbaas_base_query_select import sbaas_base_query_select
+from SBaaS_base.sbaas_base_query_delete import sbaas_base_query_delete
+
+from SBaaS_base.sbaas_template_query import sbaas_template_query
 #other
 
-class stage03_quantification_simulation_query(sbaas_base):
+class stage03_quantification_simulation_query(sbaas_template_query):
+    def initialize_supportedTables(self):
+        '''Set the supported tables dict for data_stage03_quantification_simulation
+        '''
+        tables_supported = {'data_stage03_quantification_simulation':data_stage03_quantification_simulation,
+            'data_stage03_quantification_simulationParameters':data_stage03_quantification_simulationParameters,
+            };
+        self.set_supportedTables(tables_supported);
     ## Query from data_stage03_quantification_simulation
     # query sample_name_abbreviations from data_stage03_quantification_simulation
     def get_sampleNameAbbreviations_experimentID_dataStage03QuantificationSimulation(self,experiment_id_I):
@@ -244,10 +256,7 @@ class stage03_quantification_simulation_query(sbaas_base):
             elif simulation_id_I:
                 reset = self.session.query(data_stage03_quantification_simulation).filter(data_stage03_quantification_simulation.simulation_id.like(simulation_id_I)).delete(synchronize_session=False);
                 reset = self.session.query(data_stage03_quantification_simulationParameters).filter(data_stage03_quantification_simulationParameters.simulation_id.like(simulation_id_I)).delete(synchronize_session=False);
-            else:
-                reset = self.session.query(data_stage03_quantification_simulation).delete(synchronize_session=False);
-                reset = self.session.query(data_stage03_quantification_simulationParameters).delete(synchronize_session=False);
-            self.session.commit();
+                self.session.commit();
         except SQLAlchemyError as e:
             print(e);
     def initialize_dataStage03_quantification_simulation(self):

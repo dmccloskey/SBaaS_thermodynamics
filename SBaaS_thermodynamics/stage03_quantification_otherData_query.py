@@ -1,13 +1,24 @@
-#LIMS
-from SBaaS_LIMS.lims_experiment_postgresql_models import *
-from SBaaS_LIMS.lims_sample_postgresql_models import *
 #SBaaS models
 from .stage03_quantification_otherData_postgresql_models import *
 #SBaaS base
 from SBaaS_base.sbaas_base import sbaas_base
+from SBaaS_base.sbaas_base_query_update import sbaas_base_query_update
+from SBaaS_base.sbaas_base_query_drop import sbaas_base_query_drop
+from SBaaS_base.sbaas_base_query_initialize import sbaas_base_query_initialize
+from SBaaS_base.sbaas_base_query_insert import sbaas_base_query_insert
+from SBaaS_base.sbaas_base_query_select import sbaas_base_query_select
+from SBaaS_base.sbaas_base_query_delete import sbaas_base_query_delete
+
+from SBaaS_base.sbaas_template_query import sbaas_template_query
 #other
 
-class stage03_quantification_otherData_query(sbaas_base):
+class stage03_quantification_otherData_query(sbaas_template_query):
+    def initialize_supportedTables(self):
+        '''Set the supported tables dict for data_stage03_quantification_otherData
+        '''
+        tables_supported = {'data_stage03_quantification_otherData':data_stage03_quantification_otherData,
+            };
+        self.set_supportedTables(tables_supported);
     ## Query from data_stage03_quantification_otherData
     # query rows from data data_stage03_quantification_otherData
     def get_rows_experimentIDAndTimePointAndSampleNameAbbreviation_dataStage03QuantificationOtherData(self,experiment_id_I,time_point_I,sample_name_abbreviation_I):
@@ -58,28 +69,30 @@ class stage03_quantification_otherData_query(sbaas_base):
         except SQLAlchemyError as e:
             print(e);
 
-    def add_dataStage03OtherData(self, data_I):
+    def add_dataStage03QuantificationOtherData(self, data_I):
         '''add rows of data_stage03_quantification_otherData'''
         if data_I:
             for d in data_I:
                 try:
-                    data_add = data_stage03_quantification_otherData(d['experiment_id'],
-                        d['sample_name_abbreviation'],
-                        d['time_point'],
-                        d['compartment_id'],
-                        d['pH'],
-                        d['temperature'],
-                        d['temperature_units'],
-                        d['ionic_strength'],
-                        d['ionic_strength_units'],
-                        d['used_'],
-                        d['comment_']);
+                    data_add = data_stage03_quantification_otherData(d
+                        #d['experiment_id'],
+                        #d['sample_name_abbreviation'],
+                        #d['time_point'],
+                        #d['compartment_id'],
+                        #d['pH'],
+                        #d['temperature'],
+                        #d['temperature_units'],
+                        #d['ionic_strength'],
+                        #d['ionic_strength_units'],
+                        #d['used_'],
+                        #d['comment_']
+                        );
                     self.session.add(data_add);
                 except SQLAlchemyError as e:
                     print(e);
             self.session.commit();
 
-    def update_dataStage03OtherData(self,data_I):
+    def update_dataStage03QuantificationOtherData(self,data_I):
         #Not yet tested
         '''update rows of data_stage03_quantification_otherData'''
         if data_I:

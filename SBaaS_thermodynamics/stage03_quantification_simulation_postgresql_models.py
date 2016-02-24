@@ -17,8 +17,20 @@ class data_stage03_quantification_simulation(Base):
             UniqueConstraint('experiment_id','model_id','sample_name_abbreviation','time_point','simulation_type'),
             UniqueConstraint('simulation_id'),
             )
+    
+    def __init__(self, 
+                row_dict_I,
+                ):
+        self.simulation_type=data_dict_I['simulation_type'];
+        self.comment_=data_dict_I['comment_'];
+        self.simulation_id=data_dict_I['simulation_id'];
+        self.experiment_id=data_dict_I['experiment_id'];
+        self.model_id=data_dict_I['model_id'];
+        self.sample_name_abbreviation=data_dict_I['sample_name_abbreviation'];
+        self.time_point=data_dict_I['time_point'];
+        self.used_=data_dict_I['used_'];
 
-    def __init__(self,simulation_id_I,
+    def __set__row__(self,simulation_id_I,
                  experiment_id_I,
             model_id_I,
             sample_name_abbreviation_I,
@@ -68,8 +80,20 @@ class data_stage03_quantification_simulationParameters(Base):
     __table_args__ = (
             UniqueConstraint('simulation_id'),
             )
+    
+    def __init__(self, 
+                row_dict_I,
+                ):
+        self.n_steps=data_dict_I['n_steps'];
+        self.simulation_id=data_dict_I['simulation_id'];
+        self.solver_id=data_dict_I['solver_id'];
+        self.n_points=data_dict_I['n_points'];
+        self.max_time=data_dict_I['max_time'];
+        self.sampler_id=data_dict_I['sampler_id'];
+        self.used_=data_dict_I['used_'];
+        self.comment_=data_dict_I['comment_'];
 
-    def __init__(self,
+    def __set__row__(self,
                  simulation_id_I,
         #simulation_dateAndTime_I,
         solver_id_I,

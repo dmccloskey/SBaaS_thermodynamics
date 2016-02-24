@@ -22,8 +22,27 @@ class data_stage03_quantification_dG0_f(Base):
 
     __table_args__ = (UniqueConstraint('reference_id','KEGG_id','priority'),
             )
+    def __init__(self, 
+                row_dict_I,
+                ):
+        self.dG0_f_units=data_dict_I['dG0_f_units'];
+        self.dG0_f_var=data_dict_I['dG0_f_var'];
+        self.dG0_f=data_dict_I['dG0_f'];
+        self.priority=data_dict_I['priority'];
+        self.KEGG_id=data_dict_I['KEGG_id'];
+        self.met_id=data_dict_I['met_id'];
+        self.met_name=data_dict_I['met_name'];
+        self.reference_id=data_dict_I['reference_id'];
+        self.ionic_strength=data_dict_I['ionic_strength'];
+        self.ionic_strength_units=data_dict_I['ionic_strength_units'];
+        self.pH=data_dict_I['pH'];
+        self.pH_units=data_dict_I['pH_units'];
+        self.used_=data_dict_I['used_'];
+        self.comment_=data_dict_I['comment_'];
+        self.temperature_units=data_dict_I['temperature_units'];
+        self.temperature=data_dict_I['temperature'];
 
-    def __init__(self, reference_id_I, met_name_I, met_id_I, KEGG_id_I, priority_I,
+    def __set__row__(self, reference_id_I, met_name_I, met_id_I, KEGG_id_I, priority_I,
                  dG0_f_I, dG0_f_var_I, dG0_f_units_I, temperature_I, temperature_units_I, ionic_strength_I, ionic_strength_units_I,
                  pH_I, pH_units_I, used_I, comment_I):
         self.reference_id = reference_id_I;
@@ -91,8 +110,31 @@ class data_stage03_quantification_dG_f(Base):
 
     __table_args__ = (UniqueConstraint('experiment_id','model_id','sample_name_abbreviation','time_point','met_id'),
             )
+    def __init__(self, 
+                row_dict_I,
+                ):
+        self.met_name=data_dict_I['met_name'];
+        self.time_point=data_dict_I['time_point'];
+        self.sample_name_abbreviation=data_dict_I['sample_name_abbreviation'];
+        self.model_id=data_dict_I['model_id'];
+        self.experiment_id=data_dict_I['experiment_id'];
+        self.temperature=data_dict_I['temperature'];
+        self.used_=data_dict_I['used_'];
+        self.measured=data_dict_I['measured'];
+        self.pH_units=data_dict_I['pH_units'];
+        self.temperature_units=data_dict_I['temperature_units'];
+        self.ionic_strength=data_dict_I['ionic_strength'];
+        self.ionic_strength_units=data_dict_I['ionic_strength_units'];
+        self.pH=data_dict_I['pH'];
+        self.comment_=data_dict_I['comment_'];
+        self.dG_f_ub=data_dict_I['dG_f_ub'];
+        self.dG_f_lb=data_dict_I['dG_f_lb'];
+        self.dG_f_units=data_dict_I['dG_f_units'];
+        self.dG_f_var=data_dict_I['dG_f_var'];
+        self.dG_f=data_dict_I['dG_f'];
+        self.met_id=data_dict_I['met_id'];
 
-    def __init__(self, experiment_id_I,model_id_I,sample_name_abbreviation_I,
+    def __set__row__(self, experiment_id_I,model_id_I,sample_name_abbreviation_I,
                  time_point_I, met_name_I, met_id_I,
                  dG_f_I, dG_f_var_I, dG_f_units_I, 
                  dG_f_lb_I, dG_f_ub_I, temperature_I, temperature_units_I,

@@ -1,13 +1,24 @@
-#LIMS
-from SBaaS_LIMS.lims_experiment_postgresql_models import *
-from SBaaS_LIMS.lims_sample_postgresql_models import *
 #SBaaS models
 from .stage03_quantification_metid2keggid_postgresql_models import *
 #SBaaS base
 from SBaaS_base.sbaas_base import sbaas_base
+from SBaaS_base.sbaas_base_query_update import sbaas_base_query_update
+from SBaaS_base.sbaas_base_query_drop import sbaas_base_query_drop
+from SBaaS_base.sbaas_base_query_initialize import sbaas_base_query_initialize
+from SBaaS_base.sbaas_base_query_insert import sbaas_base_query_insert
+from SBaaS_base.sbaas_base_query_select import sbaas_base_query_select
+from SBaaS_base.sbaas_base_query_delete import sbaas_base_query_delete
+
+from SBaaS_base.sbaas_template_query import sbaas_template_query
 #other
 
-class stage03_quantification_metid2keggid_query(sbaas_base):
+class stage03_quantification_metid2keggid_query(sbaas_template_query):
+    def initialize_supportedTables(self):
+        '''Set the supported tables dict for data_stage03_quantification_metid2keggid
+        '''
+        tables_supported = {'data_stage03_quantification_metid2keggid':data_stage03_quantification_metid2keggid,
+            };
+        self.set_supportedTables(tables_supported);
     ## Query from data_stage03_quantification_metid2keggid
     # query rows from data data_stage03_quantification_metid2keggid
     def get_rows_dataStage03QuantificationMetid2keggid(self):
@@ -42,22 +53,23 @@ class stage03_quantification_metid2keggid_query(sbaas_base):
         except SQLAlchemyError as e:
             print(e);
 
-    def add_dataStage03metid2keggid(self, data_I):
+    def add_dataStage03QuantificationMetid2keggid(self, data_I):
         '''add rows of data_stage03_quantification_metid2keggid'''
         if data_I:
             for d in data_I:
                 try:
-                    data_add = data_stage03_quantification_metid2keggid(
-                        d['met_id'],
-                        d['KEGG_id'],
-                        d['used_'],
-                        d['comment_']);
+                    data_add = data_stage03_quantification_metid2keggid(d
+                        #d['met_id'],
+                        #d['KEGG_id'],
+                        #d['used_'],
+                        #d['comment_']
+                        );
                     self.session.add(data_add);
                 except SQLAlchemyError as e:
                     print(e);
             self.session.commit();
 
-    def update_dataStage03metid2keggid(self,data_I):
+    def update_dataStage03QuantificationMetid2keggid(self,data_I):
         #Not yet tested
         '''update rows of data_stage03_quantification_metid2keggid'''
         if data_I:

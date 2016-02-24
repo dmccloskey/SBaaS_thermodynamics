@@ -17,8 +17,23 @@ class data_stage03_quantification_otherData(Base):
 
     __table_args__ = (UniqueConstraint('experiment_id','sample_name_abbreviation','compartment_id'),
             )
+    
+    def __init__(self, 
+                row_dict_I,
+                ):
+        self.comment_=data_dict_I['comment_'];
+        self.experiment_id=data_dict_I['experiment_id'];
+        self.sample_name_abbreviation=data_dict_I['sample_name_abbreviation'];
+        self.time_point=data_dict_I['time_point'];
+        self.compartment_id=data_dict_I['compartment_id'];
+        self.pH=data_dict_I['pH'];
+        self.temperature=data_dict_I['temperature'];
+        self.temperature_units=data_dict_I['temperature_units'];
+        self.ionic_strength=data_dict_I['ionic_strength'];
+        self.ionic_strength_units=data_dict_I['ionic_strength_units'];
+        self.used_=data_dict_I['used_'];
 
-    def __init__(self,experiment_id_I,sample_name_abbreviation_I,
+    def __set__row__(self,experiment_id_I,sample_name_abbreviation_I,
                  time_point_I,compartment_id_I,pH_I,
                  temperature_I,temperature_units_I,ionic_strength_I,
                  ionic_strength_units_I,used__I,comment__I):
