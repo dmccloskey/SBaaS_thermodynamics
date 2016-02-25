@@ -46,7 +46,7 @@ class stage03_quantification_tfba_execute(stage03_quantification_tfba_io,
         print('execute_thermodynamicSampling...')
         # get simulation information
         simulation_info_all = [];
-        simulation_info_all = self.get_rows_simulationID_dataStage03QuantificationSimulation(simulation_id_I);
+        simulation_info_all = self.get_rows_simulationIDAndSimulationType_dataStage03QuantificationSimulation(simulation_id_I,'sampling')
         if not simulation_info_all:
             print('simulation not found!')
             return;
@@ -245,7 +245,7 @@ class stage03_quantification_tfba_execute(stage03_quantification_tfba_io,
         modelsCOBRA = models_COBRA_dependencies();
         # get simulation information
         simulation_info_all = [];
-        simulation_info_all = self.get_rows_simulationID_dataStage03QuantificationSimulation(simulation_id_I);
+        simulation_info_all = self.get_rows_simulationIDAndSimulationType_dataStage03QuantificationSimulation(simulation_id_I,'sampling')
         if not simulation_info_all:
             print('simulation not found!')
             return;

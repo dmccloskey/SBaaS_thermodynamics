@@ -212,14 +212,17 @@ class stage03_quantification_measuredData_execute(stage03_quantification_measure
         #add data to the database:
         self.add_dataStage03QuantificationMeasuredFluxes(data_O);
         #self.session.commit();
-    def execute_makeMeasuredFluxes(self,experiment_id_I, metID2RxnID_I = {}, sample_name_abbreviations_I = [], met_ids_I = []):
-        '''Collect and flux data from data_stage01_physiology_ratesAverages for physiological simulation'''
-        #Input:
-        #   metID2RxnID_I = e.g. {'glc-D':{'model_id':'140407_iDM2014','rxn_id':'EX_glc_LPAREN_e_RPAREN_'},
-        #                        {'ac':{'model_id':'140407_iDM2014','rxn_id':'EX_ac_LPAREN_e_RPAREN_'},
-        #                        {'succ':{'model_id':'140407_iDM2014','rxn_id':'EX_succ_LPAREN_e_RPAREN_'},
-        #                        {'lac-L':{'model_id':'140407_iDM2014','rxn_id':'EX_lac_DASH_L_LPAREN_e_RPAREN_'},
-        #                        {'biomass':{'model_id':'140407_iDM2014','rxn_id':'Ec_biomass_iJO1366_WT_53p95M'}};
+    def execute_makeMeasuredFluxes(self,experiment_id_I, metID2RxnID_I = {}, sample_name_abbreviations_I = [], met_ids_I = [],
+                                   correct_EX_glc_LPAREN_e_RPAREN_I = True):
+        '''Collect and flux data from data_stage01_physiology_ratesAverages for physiological simulation
+        INPUT:
+        metID2RxnID_I = e.g. {'glc-D':{'model_id':'140407_iDM2014','rxn_id':'EX_glc_LPAREN_e_RPAREN_'},
+                                {'ac':{'model_id':'140407_iDM2014','rxn_id':'EX_ac_LPAREN_e_RPAREN_'},
+                                {'succ':{'model_id':'140407_iDM2014','rxn_id':'EX_succ_LPAREN_e_RPAREN_'},
+                                {'lac-L':{'model_id':'140407_iDM2014','rxn_id':'EX_lac_DASH_L_LPAREN_e_RPAREN_'},
+                                {'biomass':{'model_id':'140407_iDM2014','rxn_id':'Ec_biomass_iJO1366_WT_53p95M'}};
+        correct_EX_glc_LPAREN_e_RPAREN_I = boolean, if True, the direction of glucose input will be reversed
+                                '''
 
         data_O = [];
         # get sample names and sample name abbreviations
@@ -245,6 +248,12 @@ class stage03_quantification_measuredData_execute(stage03_quantification_measure
                 rate_stdev = sqrt(rate_var);
                 model_id = metID2RxnID_I[met]['model_id'];
                 rxn_id = metID2RxnID_I[met]['rxn_id'];
+                # correct for glucose uptake
+                if rxn_id == 'EX_glc_LPAREN_e_RPAREN_' and correct_EX_glc_LPAREN_e_RPAREN_I:
+                    rate_lb_tmp,rate_ub_tmp = rate_lb,rate_ub;
+                    rate_lb = min([abs(x) for x in [rate_lb_tmp,rate_ub_tmp]]);
+                    rate_ub = max([abs(x) for x in [rate_lb_tmp,rate_ub_tmp]]);
+                    rate_average = abs(rate_average);
                 # record the data
                 data_tmp = {'experiment_id':experiment_id_I,
                         'model_id':model_id,

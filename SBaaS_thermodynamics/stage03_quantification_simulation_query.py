@@ -158,6 +158,28 @@ class stage03_quantification_simulation_query(sbaas_template_query):
             return rows_O;
         except SQLAlchemyError as e:
             print(e);
+    def get_rows_simulationIDAndSimulationType_dataStage03QuantificationSimulation(self,simulation_id_I,simulation_type_I):
+        '''Querry rows that are used from the simulation'''
+        try:
+            data = self.session.query(data_stage03_quantification_simulation).filter(
+                    data_stage03_quantification_simulation.simulation_id.like(simulation_id_I),
+                    data_stage03_quantification_simulation.simulation_type.like(simulation_type_I),
+                    data_stage03_quantification_simulation.used_.is_(True)).all();
+            rows_O = [];
+            if data: 
+                for d in data:
+                    rows_O.append({
+                            'simulation_id':d.simulation_id,
+                            'experiment_id':d.experiment_id,
+                            'model_id':d.model_id,
+                            'sample_name_abbreviation':d.sample_name_abbreviation,
+                            'time_point':d.time_point,
+                            'simulation_type':d.simulation_type,
+                            'used_':d.used_,
+                            'comment_':d.comment_});
+            return rows_O;
+        except SQLAlchemyError as e:
+            print(e);
 
     def add_dataStage03QuantificationSimulation(self, data_I):
         '''add rows of data_stage03_quantification_simulation'''

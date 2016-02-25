@@ -75,6 +75,7 @@ class data_stage03_quantification_sampledData(Base):
     variable_type = Column(String(50)) # e.g., flux, concentration, dG_r
     variable_units = Column(String(50), default = 'mmol*gDW-1*hr-1'); 
     sampling_points = Column(postgresql.ARRAY(Float)); #
+    sampling_n = Column(Integer);
     sampling_ave = Column(Float);
     sampling_var = Column(Float);
     sampling_lb = Column(Float);
@@ -100,6 +101,7 @@ class data_stage03_quantification_sampledData(Base):
         self.variable_id=row_dict_I['variable_id'];
         self.variable_type=row_dict_I['variable_type'];
         self.variable_units=row_dict_I['variable_units'];
+        self.sampling_n=row_dict_I['sampling_n'];
         self.sampling_points=row_dict_I['sampling_points'];
         self.sampling_ave=row_dict_I['sampling_ave'];
         self.sampling_var=row_dict_I['sampling_var'];
@@ -119,7 +121,7 @@ class data_stage03_quantification_sampledData(Base):
         #experiment_id_I,model_id_I,
         #    sample_name_abbreviation_I,
             variable_id_I,variable_type_I,variable_units_I,
-            sampling_points_I,
+            sampling_points_I,sampling_n_I,
                  sampling_ave_I,sampling_var_I,sampling_lb_I,sampling_ub_I,
                  sampling_ci_I,
                  sampling_min_I,sampling_max_I,sampling_median_I,
@@ -134,6 +136,7 @@ class data_stage03_quantification_sampledData(Base):
         self.variable_type=variable_type_I
         self.variable_units=variable_units_I
         self.sampling_points=sampling_points_I
+        self.sampling_n=sampling_n_I
         self.sampling_ave=sampling_ave_I
         self.sampling_var=sampling_var_I
         self.sampling_lb=sampling_lb_I
@@ -158,6 +161,7 @@ class data_stage03_quantification_sampledData(Base):
                 'variable_type':self.variable_type,
                 'variable_units':self.variable_units,
                 'sampling_points':self.sampling_points,
+                'sampling_n':self.sampling_n,
                 'sampling_ave':self.sampling_ave,
                 'sampling_var':self.sampling_var,
                 'sampling_lb':self.sampling_lb,
