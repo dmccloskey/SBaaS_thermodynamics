@@ -23,13 +23,13 @@ class data_stage03_quantification_sampledPoints(Base):
     def __init__(self, 
                 row_dict_I,
                 ):
-        self.data_dir=data_dict_I['data_dir'];
-        self.infeasible_loops=data_dict_I['infeasible_loops'];
-        self.used_=data_dict_I['used_'];
-        self.comment_=data_dict_I['comment_'];
-        self.simulation_id=data_dict_I['simulation_id'];
-        self.simulation_dateAndTime=data_dict_I['simulation_dateAndTime'];
-        self.mixed_fraction=data_dict_I['mixed_fraction'];
+        self.data_dir=row_dict_I['data_dir'];
+        self.infeasible_loops=row_dict_I['infeasible_loops'];
+        self.used_=row_dict_I['used_'];
+        self.comment_=row_dict_I['comment_'];
+        self.simulation_id=row_dict_I['simulation_id'];
+        self.simulation_dateAndTime=row_dict_I['simulation_dateAndTime'];
+        self.mixed_fraction=row_dict_I['mixed_fraction'];
 
     def __set__row__(self,simulation_id_I,
         simulation_dateAndTime_I,
@@ -95,24 +95,24 @@ class data_stage03_quantification_sampledData(Base):
     def __init__(self, 
                 row_dict_I,
                 ):
-        self.simulation_id=data_dict_I['simulation_id'];
-        self.simulation_dateAndTime=data_dict_I['simulation_dateAndTime'];
-        self.variable_id=data_dict_I['variable_id'];
-        self.variable_type=data_dict_I['variable_type'];
-        self.variable_units=data_dict_I['variable_units'];
-        self.sampling_points=data_dict_I['sampling_points'];
-        self.sampling_ave=data_dict_I['sampling_ave'];
-        self.sampling_var=data_dict_I['sampling_var'];
-        self.sampling_lb=data_dict_I['sampling_lb'];
-        self.sampling_ub=data_dict_I['sampling_ub'];
-        self.sampling_ci=data_dict_I['sampling_ci'];
-        self.sampling_min=data_dict_I['sampling_min'];
-        self.sampling_max=data_dict_I['sampling_max'];
-        self.sampling_median=data_dict_I['sampling_median'];
-        self.sampling_iq_1=data_dict_I['sampling_iq_1'];
-        self.sampling_iq_3=data_dict_I['sampling_iq_3'];
-        self.used_=data_dict_I['used_'];
-        self.comment_=data_dict_I['comment_'];
+        self.simulation_id=row_dict_I['simulation_id'];
+        self.simulation_dateAndTime=row_dict_I['simulation_dateAndTime'];
+        self.variable_id=row_dict_I['variable_id'];
+        self.variable_type=row_dict_I['variable_type'];
+        self.variable_units=row_dict_I['variable_units'];
+        self.sampling_points=row_dict_I['sampling_points'];
+        self.sampling_ave=row_dict_I['sampling_ave'];
+        self.sampling_var=row_dict_I['sampling_var'];
+        self.sampling_lb=row_dict_I['sampling_lb'];
+        self.sampling_ub=row_dict_I['sampling_ub'];
+        self.sampling_ci=row_dict_I['sampling_ci'];
+        self.sampling_min=row_dict_I['sampling_min'];
+        self.sampling_max=row_dict_I['sampling_max'];
+        self.sampling_median=row_dict_I['sampling_median'];
+        self.sampling_iq_1=row_dict_I['sampling_iq_1'];
+        self.sampling_iq_3=row_dict_I['sampling_iq_3'];
+        self.used_=row_dict_I['used_'];
+        self.comment_=row_dict_I['comment_'];
 
     def __set__row__(self,simulation_id_I,
         simulation_dateAndTime_I,

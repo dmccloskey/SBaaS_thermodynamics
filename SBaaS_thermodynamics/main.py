@@ -4,9 +4,7 @@ from SBaaS_base.postgresql_settings import postgresql_settings
 from SBaaS_base.postgresql_orm import postgresql_orm
 
 # read in the settings file
-#filename = 'C:/Users/dmccloskey-sbrg/Google Drive/SBaaS_base/settings_1.ini';
-#filename = 'C:/Users/dmccloskey-sbrg/Google Drive/SBaaS_base/settings_metabolomics.ini';
-filename = 'C:/Users/dmccloskey-sbrg/Google Drive/SBaaS_settings/settings_metabolomics_151001.ini';
+filename = 'C:/Users/dmccloskey-sbrg/Google Drive/SBaaS_settings/settings_metabolomics.ini';
 pg_settings = postgresql_settings(filename);
 
 # connect to the database from the settings file
@@ -28,12 +26,25 @@ sys.path.append(pg_settings.datadir_settings['github']+'/SBaaS_thermodynamics')
 sys.path.append(pg_settings.datadir_settings['github']+'/SBaaS_COBRA')
 # SBaaS dependencies paths:
 sys.path.append(pg_settings.datadir_settings['github']+'/io_utilities')
-sys.path.append(pg_settings.datadir_settings['github']+'/calculate_utilities')
 sys.path.append(pg_settings.datadir_settings['github']+'/quantification_analysis')
 sys.path.append(pg_settings.datadir_settings['github']+'/matplotlib_utilities')
 sys.path.append(pg_settings.datadir_settings['github']+'/thermodynamics/thermodynamics')
 sys.path.append(pg_settings.datadir_settings['github']+'/component-contribution')
 sys.path.append(pg_settings.datadir_settings['github']+'/molmass')
+sys.path.append(pg_settings.datadir_settings['github']+'/python_statistics')
+sys.path.append(pg_settings.datadir_settings['github']+'/r_statistics')
+sys.path.append(pg_settings.datadir_settings['github']+'/listDict')
+sys.path.append(pg_settings.datadir_settings['github']+'/ddt_python')
+
+#make the simulation table
+from SBaaS_thermodynamics.stage03_quantification_simulation_execute import stage03_quantification_simulation_execute
+exsimulation01 = stage03_quantification_simulation_execute(session,engine,pg_settings.datadir_settings);
+
+#import the simulation parameters
+exsimulation01.import_dataStage03QuantificationSimulation_add(pg_settings.datadir_settings['workspace_data']+'/_input/141007_data_stage03_quantification_simulation.csv');
+exsimulation01.import_dataStage03QuantificationSimulationParameters_add(pg_settings.datadir_settings['workspace_data']+'/_input/141007_data_stage03_quantification_simulationParameters.csv')
+exsimulation01.import_dataStage03QuantificationSimulation_add(pg_settings.datadir_settings['workspace_data']+'/_input/151026_data_stage03_quantification_simulation01.csv');
+exsimulation01.import_dataStage03QuantificationSimulationParameters_add(pg_settings.datadir_settings['workspace_data']+'/_input/151026_data_stage03_quantification_simulationParameters01.csv')
 
 analysis_ids = ['ALEWt01'];
 simulation_ids = ['ALEWt01_iJO1366_ALEWt_irreversible_OxicEvo03Glc_0',

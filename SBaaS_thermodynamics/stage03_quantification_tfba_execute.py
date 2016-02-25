@@ -333,7 +333,10 @@ class stage03_quantification_tfba_execute(stage03_quantification_tfba_io,
             else:
                 print('sampler_id not recognized');
             # add data to the database
-            row = {'data_dir':data_dir_I+'/'+filename_points,
+            row = {'simulation_id':simulation_id_I,
+                'simulation_dateAndTime':sampling.simulation_dateAndTime,
+                'mixed_fraction':sampling.mixed_fraction,
+                'data_dir':data_dir_I+'/'+filename_points,
                 'infeasible_loops':sampling.loops,
                 'used_':True,
                 'comment_':None
@@ -365,8 +368,8 @@ class stage03_quantification_tfba_execute(stage03_quantification_tfba_io,
                     'sampling_var':v['var'],
                     'sampling_lb':v['lb'],
                     'sampling_ub':v['ub'],
-                    'sampling_ci':v['min'],
-                    'sampling_min':0.95,
+                    'sampling_ci':0.95,
+                    'sampling_min':v['min'],
                     'sampling_max':v['max'],
                     'sampling_median':v['median'],
                     'sampling_iq_1':v['iq_1'],

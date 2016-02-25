@@ -21,14 +21,14 @@ class data_stage03_quantification_simulation(Base):
     def __init__(self, 
                 row_dict_I,
                 ):
-        self.simulation_type=data_dict_I['simulation_type'];
-        self.comment_=data_dict_I['comment_'];
-        self.simulation_id=data_dict_I['simulation_id'];
-        self.experiment_id=data_dict_I['experiment_id'];
-        self.model_id=data_dict_I['model_id'];
-        self.sample_name_abbreviation=data_dict_I['sample_name_abbreviation'];
-        self.time_point=data_dict_I['time_point'];
-        self.used_=data_dict_I['used_'];
+        self.simulation_type=row_dict_I['simulation_type'];
+        self.comment_=row_dict_I['comment_'];
+        self.simulation_id=row_dict_I['simulation_id'];
+        self.experiment_id=row_dict_I['experiment_id'];
+        self.model_id=row_dict_I['model_id'];
+        self.sample_name_abbreviation=row_dict_I['sample_name_abbreviation'];
+        self.time_point=row_dict_I['time_point'];
+        self.used_=row_dict_I['used_'];
 
     def __set__row__(self,simulation_id_I,
                  experiment_id_I,
@@ -84,14 +84,14 @@ class data_stage03_quantification_simulationParameters(Base):
     def __init__(self, 
                 row_dict_I,
                 ):
-        self.n_steps=data_dict_I['n_steps'];
-        self.simulation_id=data_dict_I['simulation_id'];
-        self.solver_id=data_dict_I['solver_id'];
-        self.n_points=data_dict_I['n_points'];
-        self.max_time=data_dict_I['max_time'];
-        self.sampler_id=data_dict_I['sampler_id'];
-        self.used_=data_dict_I['used_'];
-        self.comment_=data_dict_I['comment_'];
+        self.n_steps=row_dict_I['n_steps'];
+        self.simulation_id=row_dict_I['simulation_id'];
+        self.solver_id=row_dict_I['solver_id'];
+        self.n_points=row_dict_I['n_points'];
+        self.max_time=row_dict_I['max_time'];
+        self.sampler_id=row_dict_I['sampler_id'];
+        self.used_=row_dict_I['used_'];
+        self.comment_=row_dict_I['comment_'];
 
     def __set__row__(self,
                  simulation_id_I,

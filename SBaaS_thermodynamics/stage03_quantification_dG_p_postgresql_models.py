@@ -21,18 +21,18 @@ class data_stage03_quantification_dG_p(Base):
     def __init__(self, 
                 row_dict_I,
                 ):
-        self.pathway_id=data_dict_I['pathway_id'];
-        self.time_point=data_dict_I['time_point'];
-        self.sample_name_abbreviation=data_dict_I['sample_name_abbreviation'];
-        self.model_id=data_dict_I['model_id'];
-        self.experiment_id=data_dict_I['experiment_id'];
-        self.used_=data_dict_I['used_'];
-        self.dG_p_ub=data_dict_I['dG_p_ub'];
-        self.comment_=data_dict_I['comment_'];
-        self.dG_p_lb=data_dict_I['dG_p_lb'];
-        self.dG_p_units=data_dict_I['dG_p_units'];
-        self.dG_p_var=data_dict_I['dG_p_var'];
-        self.dG_p=data_dict_I['dG_p'];
+        self.pathway_id=row_dict_I['pathway_id'];
+        self.time_point=row_dict_I['time_point'];
+        self.sample_name_abbreviation=row_dict_I['sample_name_abbreviation'];
+        self.model_id=row_dict_I['model_id'];
+        self.experiment_id=row_dict_I['experiment_id'];
+        self.used_=row_dict_I['used_'];
+        self.dG_p_ub=row_dict_I['dG_p_ub'];
+        self.comment_=row_dict_I['comment_'];
+        self.dG_p_lb=row_dict_I['dG_p_lb'];
+        self.dG_p_units=row_dict_I['dG_p_units'];
+        self.dG_p_var=row_dict_I['dG_p_var'];
+        self.dG_p=row_dict_I['dG_p'];
 
     def __set__row__(self,experiment_id_I,model_id_I,sample_name_abbreviation_I,
                  time_point_I,pathway_id_I,
@@ -91,18 +91,18 @@ class data_stage03_quantification_dG0_p(Base):
     def __init__(self, 
                 row_dict_I,
                 ):
-        self.comment_=data_dict_I['comment_'];
-        self.used_=data_dict_I['used_'];
-        self.dG0_p_ub=data_dict_I['dG0_p_ub'];
-        self.dG0_p_lb=data_dict_I['dG0_p_lb'];
-        self.dG0_p_units=data_dict_I['dG0_p_units'];
-        self.dG0_p_var=data_dict_I['dG0_p_var'];
-        self.dG0_p=data_dict_I['dG0_p'];
-        self.pathway_id=data_dict_I['pathway_id'];
-        self.time_point=data_dict_I['time_point'];
-        self.sample_name_abbreviation=data_dict_I['sample_name_abbreviation'];
-        self.model_id=data_dict_I['model_id'];
-        self.experiment_id=data_dict_I['experiment_id'];
+        self.comment_=row_dict_I['comment_'];
+        self.used_=row_dict_I['used_'];
+        self.dG0_p_ub=row_dict_I['dG0_p_ub'];
+        self.dG0_p_lb=row_dict_I['dG0_p_lb'];
+        self.dG0_p_units=row_dict_I['dG0_p_units'];
+        self.dG0_p_var=row_dict_I['dG0_p_var'];
+        self.dG0_p=row_dict_I['dG0_p'];
+        self.pathway_id=row_dict_I['pathway_id'];
+        self.time_point=row_dict_I['time_point'];
+        self.sample_name_abbreviation=row_dict_I['sample_name_abbreviation'];
+        self.model_id=row_dict_I['model_id'];
+        self.experiment_id=row_dict_I['experiment_id'];
 
     def __set__row__(self,experiment_id_I,model_id_I,sample_name_abbreviation_I,
                  time_point_I,pathway_id_I,
