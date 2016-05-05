@@ -6,6 +6,7 @@ from SBaaS_physiology.stage01_physiology_rates_query import stage01_physiology_r
 from SBaaS_MFA.stage02_isotopomer_fittedNetFluxes_query import stage02_isotopomer_fittedNetFluxes_query
 from SBaaS_models.models_COBRA_dependencies import models_COBRA_dependencies
 import copy
+from math import sqrt
 # Dependencies from thermodynamics
 from thermodynamics.thermodynamics_metabolomicsData import thermodynamics_metabolomicsData
 
@@ -41,21 +42,13 @@ class stage03_quantification_measuredData_execute(stage03_quantification_measure
         for d in data_O:
             d['met_id']=cobradependencies.format_metid(d['component_group_name'],compartment_id_I);
             d['measured']=True;
+            d['concentration_var']=d['calculated_concentration_var'];
+            d['concentration_lb']=d['calculated_concentration_lb'];
+            d['concentration_ub']=d['calculated_concentration_ub'];
+            d['concentration']=d['calculated_concentration_average'];
+            d['concentration_units']=d['calculated_concentration_units'];
             d['comment_']=None;
-            #row = None;
-            #row = data_stage03_quantification_metabolomicsData(d['experiment_id'],
-            #        d['sample_name_abbreviation'],
-            #        d['time_point'],
-            #        cobradependencies.format_metid(d['component_group_name'],compartment_id_I),
-            #        d['calculated_concentration_average'],
-            #        d['calculated_concentration_var'],
-            #        d['calculated_concentration_units'],
-            #        d['calculated_concentration_lb'],
-            #        d['calculated_concentration_ub'],
-            #        True,
-            #        d['used_'],
-            #        None);
-            #self.session.add(row);
+
         #add data to the DB
         self.add_dataStage03QuantificationMetabolomicsData(data_O);
         #self.session.commit();
@@ -217,10 +210,10 @@ class stage03_quantification_measuredData_execute(stage03_quantification_measure
         '''Collect and flux data from data_stage01_physiology_ratesAverages for physiological simulation
         INPUT:
         metID2RxnID_I = e.g. {'glc-D':{'model_id':'140407_iDM2014','rxn_id':'EX_glc_LPAREN_e_RPAREN_'},
-                                {'ac':{'model_id':'140407_iDM2014','rxn_id':'EX_ac_LPAREN_e_RPAREN_'},
-                                {'succ':{'model_id':'140407_iDM2014','rxn_id':'EX_succ_LPAREN_e_RPAREN_'},
-                                {'lac-L':{'model_id':'140407_iDM2014','rxn_id':'EX_lac_DASH_L_LPAREN_e_RPAREN_'},
-                                {'biomass':{'model_id':'140407_iDM2014','rxn_id':'Ec_biomass_iJO1366_WT_53p95M'}};
+                                'ac':{'model_id':'140407_iDM2014','rxn_id':'EX_ac_LPAREN_e_RPAREN_'},
+                                'succ':{'model_id':'140407_iDM2014','rxn_id':'EX_succ_LPAREN_e_RPAREN_'},
+                                'lac-L':{'model_id':'140407_iDM2014','rxn_id':'EX_lac_DASH_L_LPAREN_e_RPAREN_'},
+                                'biomass':{'model_id':'140407_iDM2014','rxn_id':'Ec_biomass_iJO1366_WT_53p95M'}};
         correct_EX_glc_LPAREN_e_RPAREN_I = boolean, if True, the direction of glucose input will be reversed
                                 '''
 
@@ -242,6 +235,8 @@ class stage03_quantification_measuredData_execute(stage03_quantification_measure
             if not(met_ids): continue #no component information was found
             for met in met_ids:
                 print('Collecting experimental fluxes for metabolite ' + met);
+                # check for the conversion:
+                if not met in metID2RxnID_I.keys(): continue;
                 # get rateData
                 slope_average, intercept_average, rate_average, rate_lb, rate_ub, rate_units, rate_var = None,None,None,None,None,None,None;
                 slope_average, intercept_average, rate_average, rate_lb, rate_ub, rate_units, rate_var = self.get_rateData_experimentIDAndSampleNameAbbreviationAndMetID_dataStage01PhysiologyRatesAverages(experiment_id_I,sna,met);

@@ -257,3 +257,189 @@ class data_stage03_quantification_tcc(Base):
     
     def __repr__json__(self):
         return json.dumps(self.__repr__dict__())
+    
+class data_stage03_quantification_dG_r_comparison(Base):
+    __tablename__ = 'data_stage03_quantification_dG_r_comparison'
+    id = Column(Integer, Sequence('data_stage03_quantification_dG_r_comparison_id_seq'), primary_key=True)
+    analysis_id = Column(String(500))
+    model_id = Column(String(50))
+    simulation_id_1 = Column(String(500))
+    simulation_id_2 = Column(String(500))
+    experiment_id_1 = Column(String(50))
+    experiment_id_2 = Column(String(50))
+    sample_name_abbreviation_1 = Column(String(100))
+    sample_name_abbreviation_2 = Column(String(100))
+    time_point_1 = Column(String(10))
+    time_point_2 = Column(String(10))
+    rxn_id = Column(String(100))
+    dG_r_lb_1 = Column(Float);
+    dG_r_lb_2 = Column(Float);
+    dG_r_ub_1 = Column(Float);
+    dG_r_ub_2 = Column(Float);
+    displacement_lb_1 = Column(Float);
+    displacement_lb_2 = Column(Float);
+    displacement_ub_1 = Column(Float);
+    displacement_ub_2 = Column(Float);
+    feasible_1 = Column(Boolean);
+    feasible_2 = Column(Boolean);
+    significant_stat = Column(Boolean);
+    significant_bio = Column(Boolean);
+    dG_r_units = Column(String(50));
+    measured_concentration_coverage_criteria = Column(Float, default = 0.5);
+    measured_dG_f_coverage_criteria = Column(Float, default = 0.99);
+    #measured_concentration_coverage_1 = Column(Float);
+    #measured_concentration_coverage_2 = Column(Float);
+    #measured_dG_f_coverage_1 = Column(Float);
+    #measured_dG_f_coverage_2 = Column(Float);
+    used_ = Column(Boolean);
+    comment_ = Column(Text);
+
+    __table_args__ = (UniqueConstraint(
+        'analysis_id',
+        'simulation_id_1','simulation_id_2',
+        'rxn_id',
+        'dG_r_units',
+        'measured_concentration_coverage_criteria',
+        'measured_dG_f_coverage_criteria',
+        ),
+            )
+    
+    def __init__(self, 
+                row_dict_I,
+                ):
+        self.analysis_id=row_dict_I['analysis_id']
+        self.model_id=row_dict_I['model_id']
+        self.simulation_id_1=row_dict_I['simulation_id_1']
+        self.simulation_id_2=row_dict_I['simulation_id_2']
+        self.experiment_id_1=row_dict_I['experiment_id_1']
+        self.experiment_id_2=row_dict_I['experiment_id_2']
+        self.sample_name_abbreviation_1=row_dict_I['sample_name_abbreviation_1']
+        self.sample_name_abbreviation_2=row_dict_I['sample_name_abbreviation_2']
+        self.time_point_1=row_dict_I['time_point_1']
+        self.time_point_2=row_dict_I['time_point_2']
+        self.rxn_id=row_dict_I['rxn_id']
+        self.dG_r_lb_1=row_dict_I['dG_r_lb_1']
+        self.dG_r_lb_2=row_dict_I['dG_r_lb_2']
+        self.dG_r_ub_1=row_dict_I['dG_r_ub_1']
+        self.dG_r_ub_2=row_dict_I['dG_r_ub_2']
+        self.displacement_lb_1=row_dict_I['displacement_lb_1']
+        self.displacement_lb_2=row_dict_I['displacement_lb_2']
+        self.displacement_ub_1=row_dict_I['displacement_ub_1']
+        self.displacement_ub_2=row_dict_I['displacement_ub_2']
+        self.feasible_1=row_dict_I['feasible_1']
+        self.feasible_2=row_dict_I['feasible_2']
+        self.significant_stat=row_dict_I['significant_stat']
+        self.significant_bio=row_dict_I['significant_bio']
+        self.dG_r_units=row_dict_I['dG_r_units']
+        self.measured_concentration_coverage_criteria=row_dict_I['measured_concentration_coverage_criteria']
+        self.measured_dG_f_coverage_criteria=row_dict_I['measured_dG_f_coverage_criteria']
+        #self.measured_concentration_coverage_1=row_dict_I['measured_concentration_coverage_1']
+        #self.measured_concentration_coverage_2=row_dict_I['measured_concentration_coverage_2']
+        #self.measured_dG_f_coverage_1=row_dict_I['measured_dG_f_coverage_1']
+        #self.measured_dG_f_coverage_2=row_dict_I['measured_dG_f_coverage_2']
+        self.used_=row_dict_I['used_']
+        self.comment_=row_dict_I['comment_']
+
+    def __set__row__(self,analysis_id_I,
+            model_id_I,
+            simulation_id_1_I,
+            simulation_id_2_I,
+            experiment_id_1_I,
+            experiment_id_2_I,
+            sample_name_abbreviation_1_I,
+            sample_name_abbreviation_2_I,
+            time_point_1_I,
+            time_point_2_I,
+            rxn_id_I,
+            dG_r_lb_1_I,
+            dG_r_lb_2_I,
+            dG_r_ub_1_I,
+            dG_r_ub_2_I,
+            displacement_lb_1_I,
+            displacement_lb_2_I,
+            displacement_ub_1_I,
+            displacement_ub_2_I,
+            feasible_1_I,
+            feasible_2_I,
+            significant_stat_I,
+            significant_bio_I,
+            dG_r_units_I,
+            measured_concentration_coverage_criteria_I,
+            measured_dG_f_coverage_criteria_I,
+            #measured_concentration_coverage_1_I,
+            #measured_concentration_coverage_2_I,
+            #measured_dG_f_coverage_1_I,
+            #measured_dG_f_coverage_2_I,
+            used__I,
+            comment__I,):
+        self.analysis_id=analysis_id_I
+        self.model_id=model_id_I
+        self.simulation_id_1=simulation_id_1_I
+        self.simulation_id_2=simulation_id_2_I
+        self.experiment_id_1=experiment_id_1_I
+        self.experiment_id_2=experiment_id_2_I
+        self.sample_name_abbreviation_1=sample_name_abbreviation_1_I
+        self.sample_name_abbreviation_2=sample_name_abbreviation_2_I
+        self.time_point_1=time_point_1_I
+        self.time_point_2=time_point_2_I
+        self.rxn_id=rxn_id_I
+        self.dG_r_lb_1=dG_r_lb_1_I
+        self.dG_r_lb_2=dG_r_lb_2_I
+        self.dG_r_ub_1=dG_r_ub_1_I
+        self.dG_r_ub_2=dG_r_ub_2_I
+        self.displacement_lb_1=displacement_lb_1_I
+        self.displacement_lb_2=displacement_lb_2_I
+        self.displacement_ub_1=displacement_ub_1_I
+        self.displacement_ub_2=displacement_ub_2_I
+        self.feasible_1=feasible_1_I
+        self.feasible_2=feasible_2_I
+        self.significant_stat=significant_stat_I
+        self.significant_bio=significant_bio_I
+        self.dG_r_units=dG_r_units_I
+        self.measured_concentration_coverage_criteria=measured_concentration_coverage_criteria_I
+        self.measured_dG_f_coverage_criteria=measured_dG_f_coverage_criteria_I
+        #self.measured_concentration_coverage_1=measured_concentration_coverage_1_I
+        #self.measured_concentration_coverage_2=measured_concentration_coverage_2_I
+        #self.measured_dG_f_coverage_1=measured_dG_f_coverage_1_I
+        #self.measured_dG_f_coverage_2=measured_dG_f_coverage_2_I
+        self.used_=used__I
+        self.comment_=comment__I
+
+    def __repr__dict__(self):
+        return {'id':self.id,
+            'analysis_id':self.analysis_id,
+            'model_id':self.model_id,
+            'model_id':self.model_id,
+            'simulation_id_1':self.simulation_id_1,
+            'simulation_id_2':self.simulation_id_2,
+            'experiment_id_1':self.experiment_id_1,
+            'experiment_id_2':self.experiment_id_2,
+            'sample_name_abbreviation_1':self.sample_name_abbreviation_1,
+            'sample_name_abbreviation_2':self.sample_name_abbreviation_2,
+            'time_point_1':self.time_point_1,
+            'time_point_2':self.time_point_2,
+            'rxn_id':self.rxn_id,
+            'dG_r_lb_1':self.dG_r_lb_1,
+            'dG_r_lb_2':self.dG_r_lb_2,
+            'dG_r_ub_1':self.dG_r_ub_1,
+            'dG_r_ub_2':self.dG_r_ub_2,
+            'displacement_lb_1':self.displacement_lb_1,
+            'displacement_lb_2':self.displacement_lb_2,
+            'displacement_ub_1':self.displacement_ub_1,
+            'displacement_ub_2':self.displacement_ub_2,
+            'feasible_1':self.feasible_1,
+            'feasible_2':self.feasible_2,
+            'significant_stat':self.significant_stat,
+            'significant_bio':self.significant_bio,
+            'dG_r_units':self.dG_r_units,
+            'measured_concentration_coverage_criteria':self.measured_concentration_coverage_criteria,
+            'measured_dG_f_coverage_criteria':self.measured_dG_f_coverage_criteria,
+            #'measured_concentration_coverage_1':self.measured_concentration_coverage_1,
+            #'measured_concentration_coverage_2':self.measured_concentration_coverage_2,
+            #'measured_dG_f_coverage_1':self.measured_dG_f_coverage_1,
+            #'measured_dG_f_coverage_2':self.measured_dG_f_coverage_2,
+            'used_':self.used_,
+            'comment_':self.comment_,}
+    
+    def __repr__json__(self):
+        return json.dumps(self.__repr__dict__())

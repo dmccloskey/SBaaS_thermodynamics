@@ -13,11 +13,12 @@ from thermodynamics.thermodynamics_otherData import thermodynamics_otherData
 from thermodynamics.thermodynamics_simulatedData import thermodynamics_simulatedData
 
 class stage03_quantification_dG_r_execute(stage03_quantification_dG_r_io,
-                                          stage03_quantification_measuredData_query,
+                                          #stage03_quantification_measuredData_query,
                                           stage03_quantification_dG_f_query,
                                           stage03_quantification_simulatedData_query,
                                           stage03_quantification_otherData_query,
-                                          stage03_quantification_simulation_query):
+                                          #stage03_quantification_simulation_query
+                                          ):
     def execute_calculate_dG_r(self,experiment_id_I,models_I,model_ids_I = [],
                             time_points_I=[],sample_name_abbreviations_I=[],
                             inconsistent_dG_f_I=[],inconsistent_concentrations_I=[],
@@ -25,6 +26,7 @@ class stage03_quantification_dG_r_execute(stage03_quantification_dG_r_io,
                             measured_dG_f_coverage_criteria_I=0.99):
 
         '''calculate dG0_r, dG_r, displacements, and perform a thermodynamic consistency check'''
+        print('calculating dG_r for experiment_id ' + experiment_id_I);
         dG0_r_O = [];
         dG_r_O = [];
         tcc_O = [];
@@ -35,6 +37,7 @@ class stage03_quantification_dG_r_execute(stage03_quantification_dG_r_io,
             model_ids = [];
             model_ids = self.get_modelID_experimentID_dataStage03QuantificationSimulation(experiment_id_I);
         for model_id in model_ids:
+            print('calculating dG_r for model_id ' + model_id);
             # get the cobra model
             cobra_model = models_I[model_id];
             # get simulated data
@@ -57,6 +60,7 @@ class stage03_quantification_dG_r_execute(stage03_quantification_dG_r_io,
                     sample_name_abbreviations = [];
                     sample_name_abbreviations = self.get_sampleNameAbbreviations_experimentIDAndModelIDAndTimePoint_dataStage03QuantificationSimulation(experiment_id_I,model_id,tp);
                 for sna in sample_name_abbreviations:
+                    print('calculating dG_r for sample_name_abbreviation ' + sna);
                     # get otherData
                     pH,temperature,ionic_strength = {},{},{}
                     pH,temperature,ionic_strength = self.get_rowsFormatted_experimentIDAndTimePointAndSampleNameAbbreviation_dataStage03QuantificationOtherData(experiment_id_I,tp,sna);
@@ -261,4 +265,98 @@ class stage03_quantification_dG_r_execute(stage03_quantification_dG_r_io,
                                 'measured_dG_f_coverage':tcc.dG_r_coverage[k],
                                 'used_':True,
                                 'comment_':None};
-    
+
+    def execute_compare_dG_r(self,
+            analysis_id_I,
+            simulation_id_base_I,
+            simulation_ids_I=[],
+            models_I={},
+            measured_concentration_coverage_criteria_I=0.5,
+            measured_dG_f_coverage_criteria_I=0.99):
+        '''export concentration and dG_r data for visualization'''
+        
+        data_O = [];
+
+        # Get the simulation information
+        if simulation_ids_I:
+            simulation_ids = simulation_ids_I;
+        else:
+            simulation_ids = [];
+            simulation_ids = self.get_simulationID_analysisID_dataStage03QuantificationAnalysis(analysis_id_I);
+        simulation_ids = [s for s in simulation_ids if s != simulation_id_base_I];
+        
+        # get the simulation to be compared
+        simulation_base = [];
+        simulation_base = self.get_rows_simulationID_dataStage03QuantificationSimulation(simulation_id_base_I);
+        # get metabolomics data for the simulation to be compared
+        concentrations_base = {};
+        concentrations_base = self.get_rowsEscher_experimentIDAndTimePointAndSampleNameAbbreviations_dataStage03QuantificationMetabolomicsData(
+            simulation_base[0]['experiment_id'],
+            simulation_base[0]['time_point'],
+            simulation_base[0]['sample_name_abbreviation']
+            );
+
+        for simulation_id in simulation_ids:
+            # get the simulation info
+            simulations = [];
+            simulations = self.get_rows_simulationID_dataStage03QuantificationSimulation(simulation_id);
+            model_id = simulations[0]['model_id'];
+            if models_I:
+                cobra_model = models_I[model_id];
+            experiment_id = simulations[0]['experiment_id'];
+            tp = simulations[0]['time_point'];
+            sna = simulations[0]['sample_name_abbreviation'];
+            experiment_id = simulations[0]['experiment_id'];
+
+            # get metabolomics data for the simulation to be compared
+            tcc_base = [];
+            tcc_base = self.get_rows_experimentIDAndModelIDAndTimePointAndSampleNameAbbreviations_dataStage03QuantificationTCC(
+                simulation_base[0]['experiment_id'],
+                model_id,
+                simulation_base[0]['time_point'],
+                simulation_base[0]['sample_name_abbreviation'],
+                measured_concentration_coverage_criteria_I,
+                measured_dG_f_coverage_criteria_I
+                );
+            tcc_b = tcc_base[0];
+
+            # get tcc
+            tcc = {};
+            tcc = self.get_row_experimentIDAndModelIDAndTimePointAndSampleNameAbbreviations_dataStage03QuantificationTCC(
+                experiment_id,model_id,tp,sna,tcc_b['rxn_id'],tcc_b['dG_r_lb'],tcc_b['dG_r_ub'],
+                measured_concentration_coverage_criteria_I,measured_dG_f_coverage_criteria_I);
+            # record data
+            if tcc:
+                # test for statistical and biological significance
+                significant_stat=self.check_significanceStatistical(tcc_b['dG_r_lb'],tcc_b['dG_r_ub'],tcc['dG_r_lb'],tcc['dG_r_ub']);
+                significant_bio=self.check_significanceBiological(tcc_b['dG_r_lb'],tcc_b['dG_r_ub'],tcc['dG_r_lb'],tcc['dG_r_ub']);
+                data_O.append({
+                'model_id':model_id,
+                'simulation_id_1':simulation_id_base_I,
+                'experiment_id_1':simulation_base[0]['experiment_id'],
+                'sample_name_abbreviation_1':simulation_base[0]['sample_name_abbreviation'],
+                'time_point_1':simulation_base[0]['time_point'],
+                'simulation_id_2':simulation_id,
+                'experiment_id_2':experiment_id,
+                'sample_name_abbreviation_2':sna,
+                'time_point_2':tp,
+                'rxn_id':tcc['rxn_id'],
+                'dG_r_units':tcc['dG_r_units'],
+                'dG_r_lb_1':tcc_b['dG_r_lb'],
+                'dG_r_lb_2':tcc['dG_r_lb'],
+                'dG_r_ub_1':tcc_b['dG_r_ub'],
+                'dG_r_ub_2':tcc['dG_r_ub'],
+                'displacement_lb_1':tcc_b['displacement_lb'],
+                'displacement_lb_2':tcc['displacement_lb'],
+                'displacement_ub_1':tcc_b['displacement_ub'],
+                'displacement_ub_2':tcc['displacement_ub'],
+                'feasible_1':tcc_b['feasible'],
+                'feasible_2':tcc['feasible'],
+                'significant_stat':significant_stat,
+                'significant_bio':significant_bio,
+                'measured_concentration_coverage_criteria':measured_concentration_coverage_criteria_I,
+                'measured_dG_f_coverage_criteria':measured_dG_f_coverage_criteria_I,
+
+            });
+        #add data to the DB
+        self.add_rows_table('data_stage03_quantification_dG_r_comparison',data_O);    

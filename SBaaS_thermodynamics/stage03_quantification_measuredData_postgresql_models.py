@@ -16,7 +16,7 @@ class data_stage03_quantification_metabolomicsData(Base):
     used_ = Column(Boolean);
     comment_ = Column(Text);
 
-    __table_args__ = (UniqueConstraint('experiment_id','sample_name_abbreviation','time_point','met_id'),
+    __table_args__ = (UniqueConstraint('experiment_id','sample_name_abbreviation','time_point','met_id','concentration_units'),
             )
     
     def __init__(self, 

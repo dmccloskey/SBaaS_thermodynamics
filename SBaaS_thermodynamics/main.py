@@ -40,11 +40,11 @@ sys.path.append(pg_settings.datadir_settings['github']+'/ddt_python')
 from SBaaS_thermodynamics.stage03_quantification_simulation_execute import stage03_quantification_simulation_execute
 exsimulation01 = stage03_quantification_simulation_execute(session,engine,pg_settings.datadir_settings);
 
-#import the simulation parameters
-exsimulation01.import_dataStage03QuantificationSimulation_add(pg_settings.datadir_settings['workspace_data']+'/_input/141007_data_stage03_quantification_simulation.csv');
-exsimulation01.import_dataStage03QuantificationSimulationParameters_add(pg_settings.datadir_settings['workspace_data']+'/_input/141007_data_stage03_quantification_simulationParameters.csv')
-exsimulation01.import_dataStage03QuantificationSimulation_add(pg_settings.datadir_settings['workspace_data']+'/_input/151026_data_stage03_quantification_simulation01.csv');
-exsimulation01.import_dataStage03QuantificationSimulationParameters_add(pg_settings.datadir_settings['workspace_data']+'/_input/151026_data_stage03_quantification_simulationParameters01.csv')
+##import the simulation parameters
+#exsimulation01.import_dataStage03QuantificationSimulation_add(pg_settings.datadir_settings['workspace_data']+'/_input/141007_data_stage03_quantification_simulation.csv');
+#exsimulation01.import_dataStage03QuantificationSimulationParameters_add(pg_settings.datadir_settings['workspace_data']+'/_input/141007_data_stage03_quantification_simulationParameters.csv')
+#exsimulation01.import_dataStage03QuantificationSimulation_add(pg_settings.datadir_settings['workspace_data']+'/_input/151026_data_stage03_quantification_simulation01.csv');
+#exsimulation01.import_dataStage03QuantificationSimulationParameters_add(pg_settings.datadir_settings['workspace_data']+'/_input/151026_data_stage03_quantification_simulationParameters01.csv')
 
 analysis_ids = ['ALEWt01'];
 simulation_ids = ['ALEWt01_iJO1366_ALEWt_irreversible_OxicEvo03Glc_0',
@@ -59,6 +59,30 @@ data_dir_I = 'C:/Users/dmccloskey-sbrg/Dropbox (UCSD SBRG)/MATLAB/tsampling';
 from SBaaS_thermodynamics.stage03_quantification_measuredData_execute import stage03_quantification_measuredData_execute
 exmeasuredData01 = stage03_quantification_measuredData_execute(session,engine,pg_settings.datadir_settings)
 exmeasuredData01.initialize_dataStage03_quantification_measuredData();
+
+#make the COBRA table
+from SBaaS_models.models_COBRA_execute import models_COBRA_execute
+exCOBRA01 = models_COBRA_execute(session,engine,pg_settings.datadir_settings);
+exCOBRA01.initialize_supportedTables();
+exCOBRA01.initialize_COBRA_models();
+
+#make the dG_r table
+from SBaaS_thermodynamics.stage03_quantification_dG_r_execute import stage03_quantification_dG_r_execute
+exdGr01 = stage03_quantification_dG_r_execute(session,engine,pg_settings.datadir_settings)
+exdGr01.initialize_supportedTables();
+exdGr01.initialize_tables()
+
+#pre-load the models
+thermomodels = exCOBRA01.get_models(model_ids_I=["iJO1366"]);
+
+#perform a thermodynamic comparison
+exdGr01.execute_compare_dG_r(
+    analysis_id_I='ALEsKOs01_0_evo04_0_11_evo04gnd',
+    simulation_id_base_I='ALEsKOs01_iJO1366_OxicEvo04EcoliGlc_0',
+    simulation_ids_I=[],
+    models_I=thermomodels,
+    measured_concentration_coverage_criteria_I=0.5,
+    measured_dG_f_coverage_criteria_I=0.99)
 
 #make the COBRA table
 from SBaaS_models.models_COBRA_execute import models_COBRA_execute
@@ -89,22 +113,22 @@ exCOBRA01 = models_COBRA_execute(session,engine,pg_settings.datadir_settings);
 #    models_I=thermomodels,
 #    model_ids_I=['151026_iDM2015'],
 #    diagnose_I=True);
-thermomodels = exCOBRA01.get_models(model_ids_I=['151026_iDM2015_netRxns']);
-test_O = exmeasuredData01.execute_testMeasuredFluxes(
-    experiment_id_I = 'ALEWt01',
-    models_I=thermomodels,
-    model_ids_I=['151026_iDM2015_netRxns'],
-    diagnose_I=True,
-    update_measuredFluxes_I=True,
-    adjustment_1_I=True,
-    adjustment_2_I=False,
-    );
-test_O = exmeasuredData01.execute_testMeasuredFluxes(
-    experiment_id_I = 'ALEWt01',
-    models_I=thermomodels,
-    model_ids_I=['151026_iDM2015_netRxns'],
-    diagnose_I=False,
-    update_measuredFluxes_I=False);
+#thermomodels = exCOBRA01.get_models(model_ids_I=['151026_iDM2015_netRxns']);
+#test_O = exmeasuredData01.execute_testMeasuredFluxes(
+#    experiment_id_I = 'ALEWt01',
+#    models_I=thermomodels,
+#    model_ids_I=['151026_iDM2015_netRxns'],
+#    diagnose_I=True,
+#    update_measuredFluxes_I=True,
+#    adjustment_1_I=True,
+#    adjustment_2_I=False,
+#    );
+#test_O = exmeasuredData01.execute_testMeasuredFluxes(
+#    experiment_id_I = 'ALEWt01',
+#    models_I=thermomodels,
+#    model_ids_I=['151026_iDM2015_netRxns'],
+#    diagnose_I=False,
+#    update_measuredFluxes_I=False);
 
 ##151026_iDM2014
 ##make the tfba table

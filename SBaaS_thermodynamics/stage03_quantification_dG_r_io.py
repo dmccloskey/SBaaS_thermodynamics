@@ -13,6 +13,7 @@ from io_utilities.base_importData import base_importData
 from io_utilities.base_exportData import base_exportData
 from molmass.molmass import Formula
 import numpy
+from ddt_python.ddt_container import ddt_container
 # Dependencies from escher
 from escher import Builder
 
@@ -199,22 +200,14 @@ class stage03_quantification_dG_r_io(stage03_quantification_dG_r_query,
                 "filtermenusubmitbuttonid":"submit3","filtermenuresetbuttonid":"reset3",
                 "filtermenuupdatebuttonid":"update3"}];
         # dump the data to a json file
-        data_str = 'var ' + 'data' + ' = ' + json.dumps(dataobject_O) + ';';
-        parameters_str = 'var ' + 'parameters' + ' = ' + json.dumps(parametersobject_O) + ';';
-        tile2datamap_str = 'var ' + 'tile2datamap' + ' = ' + json.dumps(tile2datamap_O) + ';';
-        filtermenu_str = 'var ' + 'filtermenu' + ' = ' + json.dumps(filtermenuobject_O) + ';';
+        ddtutilities = ddt_container(parameters_I = parametersobject_O,data_I = dataobject_O,tile2datamap_I = tile2datamap_O,filtermenu_I = filtermenuobject_O);
         if data_dir_I=='tmp':
             filename_str = self.settings['visualization_data'] + '/tmp/ddt_data.js'
-        elif data_dir_I=='project':
-            filename_str = self.settings['visualization_data'] + '/project/' + analysis_id_I + '_export_thermodynamicAnalysisEscher' + '.js'
         elif data_dir_I=='data_json':
-            data_json_O = data_str + '\n' + parameters_str + '\n' + tile2datamap_str + '\n' + filtermenu_str;
+            data_json_O = ddtutilities.get_allObjects_js();
             return data_json_O;
         with open(filename_str,'w') as file:
-            file.write(data_str);
-            file.write(parameters_str);
-            file.write(tile2datamap_str);
-            file.write(filtermenu_str);
+            file.write(ddtutilities.get_allObjects());
 
     def export_thermodynamicAnalysisComparison_csv(self,experiment_id_I,sample_name_abbreviation_base,
                     model_ids_I=[],
@@ -373,14 +366,14 @@ class stage03_quantification_dG_r_io(stage03_quantification_dG_r_query,
         data1_nestkeys = ['rxn_id'];
         if bullet_chart_I:
             data1_keymap = {'xdata':'rxn_id',
-                        'ydata':'dG_r_mean',
+                        'ydatamean':'dG_r_mean',
                         'ydatalb':'dG_r_lb',
                         'ydataub':'dG_r_ub',
                         'serieslabel':'sample_name_abbreviation',
                         'featureslabel':'rxn_id'};
         else: # not implemented
             data1_keymap = {'xdata':'rxn_id',
-                        'ydata':'dG_r_mean',
+                        'ydatamean':'dG_r_mean',
                         'ydatalb':'dG_r_lb',
                         'ydataub':'dG_r_ub',
                         'ydatamin':'min',
@@ -417,19 +410,13 @@ class stage03_quantification_dG_r_io(stage03_quantification_dG_r_query,
         parametersobject_O = [formtileparameters_O,svgtileparameters_O,tabletileparameters_O];
         tile2datamap_O = {"filtermenu1":[0],"tile2":[0],"tile3":[0]};
         # dump the data to a json file
-        data_str = 'var ' + 'data' + ' = ' + json.dumps(dataobject_O) + ';';
-        parameters_str = 'var ' + 'parameters' + ' = ' + json.dumps(parametersobject_O) + ';';
-        tile2datamap_str = 'var ' + 'tile2datamap' + ' = ' + json.dumps(tile2datamap_O) + ';';
+        ddtutilities = ddt_container(parameters_I = parametersobject_O,data_I = dataobject_O,tile2datamap_I = tile2datamap_O,filtermenu_I = None);
         if data_dir_I=='tmp':
             filename_str = self.settings['visualization_data'] + '/tmp/ddt_data.js'
-        elif data_dir_I=='project':
-            filename_str = self.settings['visualization_data'] + '/project/' + analysis_id_I + '_data_stage02_isotopomer_fittedNetFluxes' + '.js'
         elif data_dir_I=='data_json':
-            data_json_O = data_str + '\n' + parameters_str + '\n' + tile2datamap_str;
+            data_json_O = ddtutilities.get_allObjects_js();
             return data_json_O;
         with open(filename_str,'w') as file:
-            file.write(data_str);
-            file.write(parameters_str);
-            file.write(tile2datamap_str);
+            file.write(ddtutilities.get_allObjects());
                 
    

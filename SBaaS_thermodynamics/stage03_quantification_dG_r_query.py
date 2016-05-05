@@ -17,9 +17,11 @@ class stage03_quantification_dG_r_query(sbaas_template_query):
     def initialize_supportedTables(self):
         '''Set the supported tables dict for data_stage03_quantification_dG_r
         '''
-        tables_supported = {'data_stage03_quantification_dG0_r':data_stage03_quantification_dG0_r,
+        tables_supported = {
+            'data_stage03_quantification_dG0_r':data_stage03_quantification_dG0_r,
             'data_stage03_quantification_dG_r':data_stage03_quantification_dG_r,
             'data_stage03_quantification_tcc':data_stage03_quantification_tcc,
+            'data_stage03_quantification_dG_r_comparison':data_stage03_quantification_dG_r_comparison,
             };
         self.set_supportedTables(tables_supported);
     ## Query from data_stage03_quantification_dG0_r
