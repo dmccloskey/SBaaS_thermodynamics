@@ -318,45 +318,44 @@ class stage03_quantification_dG_r_execute(stage03_quantification_dG_r_io,
                 measured_concentration_coverage_criteria_I,
                 measured_dG_f_coverage_criteria_I
                 );
-            tcc_b = tcc_base[0];
-
-            # get tcc
-            tcc = {};
-            tcc = self.get_row_experimentIDAndModelIDAndTimePointAndSampleNameAbbreviations_dataStage03QuantificationTCC(
-                experiment_id,model_id,tp,sna,tcc_b['rxn_id'],tcc_b['dG_r_lb'],tcc_b['dG_r_ub'],
-                measured_concentration_coverage_criteria_I,measured_dG_f_coverage_criteria_I);
-            # record data
-            if tcc:
-                # test for statistical and biological significance
-                significant_stat=self.check_significanceStatistical(tcc_b['dG_r_lb'],tcc_b['dG_r_ub'],tcc['dG_r_lb'],tcc['dG_r_ub']);
-                significant_bio=self.check_significanceBiological(tcc_b['dG_r_lb'],tcc_b['dG_r_ub'],tcc['dG_r_lb'],tcc['dG_r_ub']);
-                data_O.append({
-                'model_id':model_id,
-                'simulation_id_1':simulation_id_base_I,
-                'experiment_id_1':simulation_base[0]['experiment_id'],
-                'sample_name_abbreviation_1':simulation_base[0]['sample_name_abbreviation'],
-                'time_point_1':simulation_base[0]['time_point'],
-                'simulation_id_2':simulation_id,
-                'experiment_id_2':experiment_id,
-                'sample_name_abbreviation_2':sna,
-                'time_point_2':tp,
-                'rxn_id':tcc['rxn_id'],
-                'dG_r_units':tcc['dG_r_units'],
-                'dG_r_lb_1':tcc_b['dG_r_lb'],
-                'dG_r_lb_2':tcc['dG_r_lb'],
-                'dG_r_ub_1':tcc_b['dG_r_ub'],
-                'dG_r_ub_2':tcc['dG_r_ub'],
-                'displacement_lb_1':tcc_b['displacement_lb'],
-                'displacement_lb_2':tcc['displacement_lb'],
-                'displacement_ub_1':tcc_b['displacement_ub'],
-                'displacement_ub_2':tcc['displacement_ub'],
-                'feasible_1':tcc_b['feasible'],
-                'feasible_2':tcc['feasible'],
-                'significant_stat':significant_stat,
-                'significant_bio':significant_bio,
-                'measured_concentration_coverage_criteria':measured_concentration_coverage_criteria_I,
-                'measured_dG_f_coverage_criteria':measured_dG_f_coverage_criteria_I,
-
-            });
+            for tcc_b in tcc_base:
+                # get tcc
+                tcc = {};
+                tcc = self.get_row_experimentIDAndModelIDAndTimePointAndSampleNameAbbreviations_dataStage03QuantificationTCC(
+                    experiment_id,model_id,tp,sna,tcc_b['rxn_id'],tcc_b['dG_r_lb'],tcc_b['dG_r_ub'],
+                    measured_concentration_coverage_criteria_I,measured_dG_f_coverage_criteria_I);
+                # record data
+                if tcc:
+                    # test for statistical and biological significance
+                    significant_stat=self.check_significanceStatistical(tcc_b['dG_r_lb'],tcc_b['dG_r_ub'],tcc['dG_r_lb'],tcc['dG_r_ub']);
+                    significant_bio=self.check_significanceBiological(tcc_b['dG_r_lb'],tcc_b['dG_r_ub'],tcc['dG_r_lb'],tcc['dG_r_ub']);
+                    data_O.append({
+                    'analysis_id':analysis_id_I,
+                    'model_id':model_id,
+                    'simulation_id_1':simulation_id_base_I,
+                    'experiment_id_1':simulation_base[0]['experiment_id'],
+                    'sample_name_abbreviation_1':simulation_base[0]['sample_name_abbreviation'],
+                    'time_point_1':simulation_base[0]['time_point'],
+                    'simulation_id_2':simulation_id,
+                    'experiment_id_2':experiment_id,
+                    'sample_name_abbreviation_2':sna,
+                    'time_point_2':tp,
+                    'rxn_id':tcc['rxn_id'],
+                    'dG_r_units':tcc['dG_r_units'],
+                    'dG_r_lb_1':tcc_b['dG_r_lb'],
+                    'dG_r_lb_2':tcc['dG_r_lb'],
+                    'dG_r_ub_1':tcc_b['dG_r_ub'],
+                    'dG_r_ub_2':tcc['dG_r_ub'],
+                    'displacement_lb_1':tcc_b['displacement_lb'],
+                    'displacement_lb_2':tcc['displacement_lb'],
+                    'displacement_ub_1':tcc_b['displacement_ub'],
+                    'displacement_ub_2':tcc['displacement_ub'],
+                    'feasible_1':tcc_b['feasible'],
+                    'feasible_2':tcc['feasible'],
+                    'significant_stat':significant_stat,
+                    'significant_bio':significant_bio,
+                    'measured_concentration_coverage_criteria':measured_concentration_coverage_criteria_I,
+                    'measured_dG_f_coverage_criteria':measured_dG_f_coverage_criteria_I,
+                    });
         #add data to the DB
         self.add_rows_table('data_stage03_quantification_dG_r_comparison',data_O);    

@@ -639,55 +639,41 @@ class stage03_quantification_dG_r_query(sbaas_template_query):
                 except SQLAlchemyError as e:
                     print(e);
             self.session.commit();
-    def drop_dataStage03_quantification_dG_r(self):
-        try:
-            data_stage03_quantification_dG0_r.__table__.drop(self.engine,True);
-            data_stage03_quantification_dG_r.__table__.drop(self.engine,True);
-            data_stage03_quantification_tcc.__table__.drop(self.engine,True);
-        except SQLAlchemyError as e:
-            print(e);
     def reset_dataStage03_quantification_dG_r_all(self,experiment_id_I = None,simulation_id_I=None):
         try:
             if experiment_id_I:
                 reset = self.session.query(data_stage03_quantification_dG0_r).filter(data_stage03_quantification_dG0_r.experiment_id.like(experiment_id_I)).delete(synchronize_session=False);
                 reset = self.session.query(data_stage03_quantification_dG_r).filter(data_stage03_quantification_dG_r.experiment_id.like(experiment_id_I)).delete(synchronize_session=False);
                 reset = self.session.query(data_stage03_quantification_tcc).filter(data_stage03_quantification_tcc.experiment_id.like(experiment_id_I)).delete(synchronize_session=False);
-            else:
-                reset = self.session.query(data_stage03_quantification_dG0_r).delete(synchronize_session=False);
-                reset = self.session.query(data_stage03_quantification_dG_r).delete(synchronize_session=False);
-                reset = self.session.query(data_stage03_quantification_tcc).delete(synchronize_session=False);
-            self.session.commit();
-        except SQLAlchemyError as e:
-            print(e);
-    def initialize_dataStage03_quantification_dG_r(self):
-        try:
-            data_stage03_quantification_dG0_r.__table__.create(self.engine,True);
-            data_stage03_quantification_dG_r.__table__.create(self.engine,True);
-            data_stage03_quantification_tcc.__table__.create(self.engine,True);
+                self.session.commit();
         except SQLAlchemyError as e:
             print(e);
     def reset_dataStage03_quantification_dG0_r(self,experiment_id_I = None,simulation_id_I=None):
         try:
             if experiment_id_I:
                 reset = self.session.query(data_stage03_quantification_dG0_r).filter(data_stage03_quantification_dG0_r.experiment_id.like(experiment_id_I)).delete(synchronize_session=False);
-            self.session.commit();
+                self.session.commit();
         except SQLAlchemyError as e:
             print(e);
     def reset_dataStage03_quantification_dG_r(self,experiment_id_I = None,simulation_id_I=None):
         try:
             if experiment_id_I:
                 reset = self.session.query(data_stage03_quantification_dG_r).filter(data_stage03_quantification_dG_r.experiment_id.like(experiment_id_I)).delete(synchronize_session=False);
-            else:
-                reset = self.session.query(data_stage03_quantification_dG_r).delete(synchronize_session=False);
-            self.session.commit();
+                self.session.commit();
         except SQLAlchemyError as e:
             print(e);
     def reset_dataStage03_quantification_tcc(self,experiment_id_I = None,simulation_id_I=None):
         try:
             if experiment_id_I:
                 reset = self.session.query(data_stage03_quantification_tcc).filter(data_stage03_quantification_tcc.experiment_id.like(experiment_id_I)).delete(synchronize_session=False);
-            else:
-                reset = self.session.query(data_stage03_quantification_tcc).delete(synchronize_session=False);
-            self.session.commit();
+                self.session.commit();
+        except SQLAlchemyError as e:
+            print(e);
+    def reset_dataStage03_quantification_dG_r_comparison(self,analysis_id_I = None):
+        try:
+            if analysis_id_I:
+                reset = self.session.query(data_stage03_quantification_dG_r_comparison).filter(
+                    data_stage03_quantification_dG_r_comparison.analysis_id.like(analysis_id_I)).delete(synchronize_session=False);
+                self.session.commit();
         except SQLAlchemyError as e:
             print(e);

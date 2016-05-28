@@ -75,6 +75,10 @@ exdGr01.initialize_tables()
 #pre-load the models
 thermomodels = exCOBRA01.get_models(model_ids_I=["iJO1366"]);
 
+exdGr01.reset_dataStage03_quantification_dG_r_comparison(
+    analysis_id_I='ALEsKOs01_0_evo04_0_11_evo04gnd'
+    );
+
 #perform a thermodynamic comparison
 exdGr01.execute_compare_dG_r(
     analysis_id_I='ALEsKOs01_0_evo04_0_11_evo04gnd',
