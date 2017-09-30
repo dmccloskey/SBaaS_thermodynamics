@@ -36,35 +36,82 @@ sys.path.append(pg_settings.datadir_settings['github']+'/r_statistics')
 sys.path.append(pg_settings.datadir_settings['github']+'/listDict')
 sys.path.append(pg_settings.datadir_settings['github']+'/ddt_python')
 
-#make the simulation table
-from SBaaS_thermodynamics.stage03_quantification_simulation_execute import stage03_quantification_simulation_execute
-exsimulation01 = stage03_quantification_simulation_execute(session,engine,pg_settings.datadir_settings);
-
-##import the simulation parameters
-#exsimulation01.import_dataStage03QuantificationSimulation_add(pg_settings.datadir_settings['workspace_data']+'/_input/141007_data_stage03_quantification_simulation.csv');
-#exsimulation01.import_dataStage03QuantificationSimulationParameters_add(pg_settings.datadir_settings['workspace_data']+'/_input/141007_data_stage03_quantification_simulationParameters.csv')
-#exsimulation01.import_dataStage03QuantificationSimulation_add(pg_settings.datadir_settings['workspace_data']+'/_input/151026_data_stage03_quantification_simulation01.csv');
-#exsimulation01.import_dataStage03QuantificationSimulationParameters_add(pg_settings.datadir_settings['workspace_data']+'/_input/151026_data_stage03_quantification_simulationParameters01.csv')
-
-analysis_ids = ['ALEWt01'];
-simulation_ids = ['ALEWt01_iJO1366_ALEWt_irreversible_OxicEvo03Glc_0',
-    'ALEWt01_iJO1366_ALEWt_irreversible_OxicEvo04Glc_0',
-    'ALEWt01_iJO1366_ALEWt_irreversible_OxicEvo08Glc_0',
-    'ALEWt01_iJO1366_ALEWt_irreversible_OxicEvo09Glc_0',
-    'ALEWt01_iJO1366_ALEWt_irreversible_OxicWtGlc_0',
-    ];
-data_dir_I = 'C:/Users/dmccloskey-sbrg/Dropbox (UCSD SBRG)/MATLAB/tsampling';
-
 #make the measuredData table
 from SBaaS_thermodynamics.stage03_quantification_measuredData_execute import stage03_quantification_measuredData_execute
 exmeasuredData01 = stage03_quantification_measuredData_execute(session,engine,pg_settings.datadir_settings)
 exmeasuredData01.initialize_dataStage03_quantification_measuredData();
+exmeasuredData01.initialize_supportedTables();
+exmeasuredData01.initialize_tables()
 
 #make the COBRA table
 from SBaaS_models.models_COBRA_execute import models_COBRA_execute
 exCOBRA01 = models_COBRA_execute(session,engine,pg_settings.datadir_settings);
 exCOBRA01.initialize_supportedTables();
-exCOBRA01.initialize_COBRA_models();
+exCOBRA01.initialize_tables()
+
+##load '150526_iDM2015'
+#exCOBRA01.import_dataStage02PhysiologyModel_json(
+#    model_id_I='151026_iDM2015_irreversible',
+#    date_I='2015-10-26 00:00:00',
+#    model_json=pg_settings.datadir_settings['workspace_data']+ '/models/150526_iDM2015.json'
+#    );
+
+#pre-load the models
+thermomodels = exCOBRA01.get_models(model_ids_I=["iJO1366_irreversible"]);
+
+#make the measuredData table
+from SBaaS_thermodynamics.stage03_quantification_measuredData_execute import stage03_quantification_measuredData_execute
+exmeasuredData01 = stage03_quantification_measuredData_execute(session,engine,pg_settings.datadir_settings)
+exmeasuredData01.initialize_supportedTables();
+exmeasuredData01.initialize_tables()
+
+#reset previous experimental data imports
+exmeasuredData01.reset_dataStage03_quantification_metabolomicsData('IndustrialStrains03');
+
+#transfer measured metabolomics data from data_stage01_quantification_averagesMIGeo
+exmeasuredData01.execute_makeMetabolomicsData_intracellular('IndustrialStrains03');
+
+#import exometabolomic information (i.e., media)
+exmeasuredData01.import_dataStage03QuantificationMetabolomicsData_add(pg_settings.datadir_settings['workspace_data']+'/_input/141007_data_stage03_quantification_metabolomicsData_glcM902.csv');
+
+#make the otherData table
+from SBaaS_thermodynamics.stage03_quantification_otherData_execute import stage03_quantification_otherData_execute
+exotherData01 = stage03_quantification_otherData_execute(session,engine,pg_settings.datadir_settings)
+exdGr01.initialize_supportedTables();
+exdGr01.initialize_tables()
+
+#reset previous experimental data imports
+exotherData01.reset_dataStage03_quantification_otherData('IndustrialStrains03');
+
+# import the pH, ionic strength, and temperature for the simulation
+exotherData01.import_dataStage03OtherData_add(pg_settings.datadir_settings['workspace_data']+'/_input/141007_data_stage03_quantification_otherData.csv');
+
+#make the simulatedData table
+from SBaaS_thermodynamics.stage03_quantification_simulatedData_execute import stage03_quantification_simulatedData_execute
+exsimData01 = stage03_quantification_simulatedData_execute(session,engine,pg_settings.datadir_settings)
+exsimData01.initialize_supportedTables();
+exsimData01.initialize_tables()
+
+#reset previous experiments
+exsimData01.reset_dataStage03_quantification_simulatedData('IndustrialStrains03')
+
+# perform FVA and single reaction deletion simulations
+exsimData01.execute_makeSimulatedData('IndustrialStrains03',models_I=thermomodels)
+
+#make the dG_f table
+from SBaaS_thermodynamics.stage03_quantification_dG_f_execute import stage03_quantification_dG_f_execute
+exdGf01 = stage03_quantification_dG_f_execute(session,engine,pg_settings.datadir_settings)
+exdGf01.initialize_supportedTables();
+exdGf01.initialize_tables()
+
+#reset previous dG_f adjustments
+exdGf01.reset_dataStage03_quantification_dG_f('IndustrialStrains03');
+
+# adjust dG0 compound formation energies to the in vivo dG compound formation energies
+# i.e, to the specified pH, ionic strength and temperature
+exdGf01.execute_adjust_dG_f('IndustrialStrains03',models_I=thermomodels);
+
+
 
 #make the dG_r table
 from SBaaS_thermodynamics.stage03_quantification_dG_r_execute import stage03_quantification_dG_r_execute
@@ -72,8 +119,15 @@ exdGr01 = stage03_quantification_dG_r_execute(session,engine,pg_settings.datadir
 exdGr01.initialize_supportedTables();
 exdGr01.initialize_tables()
 
-#pre-load the models
-thermomodels = exCOBRA01.get_models(model_ids_I=["iJO1366"]);
+# reset previous analyses
+exdGr01.reset_dataStage03_quantification_dG_r_all('IndustrialStrains03');
+
+# calculate the in vivo dG reaction energies from adjusted dG_f and metabolomics values
+# 1. dG0_r values are first calculated from the dG_f values
+# 2. dG_r values are calculated from the dG0_r values and measured data
+# 3. A thermodynamic consistency check is performed based on 
+#    FVA, SRA, and dG_r values 
+exdGr01.execute_calculate_dG_r('IndustrialStrains03',models_I=thermomodels);
 
 exdGr01.reset_dataStage03_quantification_dG_r_comparison(
     analysis_id_I='ALEsKOs01_0_evo04_0_11_evo04gnd'
@@ -87,66 +141,3 @@ exdGr01.execute_compare_dG_r(
     models_I=thermomodels,
     measured_concentration_coverage_criteria_I=0.5,
     measured_dG_f_coverage_criteria_I=0.99)
-
-#make the COBRA table
-from SBaaS_models.models_COBRA_execute import models_COBRA_execute
-exCOBRA01 = models_COBRA_execute(session,engine,pg_settings.datadir_settings);
-##reset 151026_iDM2015
-#exCOBRA01.reset_COBRA_models('151026_iDM2015');
-##make 151026_iDM2015
-#exCOBRA01.make_modelFromRxnsAndMetsTables(
-#        model_id_I='151026_iDM2015_netRxns',
-#        #model_file_name_I=pg_settings.datadir_settings['workspace_data']+ '/models/150526_iDM2015.xml',
-#        model_id_O='151026_iDM2015',date_O='2015-10-30 00:00:00',
-#        ko_list=[],flux_dict={},
-#        rxn_include_list=None,
-#        description=None,
-#        convert2irreversible_I=False,
-#        revert2reversible_I=False,
-#        convertPathway2individualRxns_I=True,
-#        model_id_template_I='iJO1366_ALEWt',
-#        pathway_model_id_I='iJO1366');
-
-#test the model
-#test_result = exCOBRA01.execute_testModel(model_id_I='151026_iDM2015');
-#test_result = exCOBRA01.execute_testModel(model_id_I='151026_iDM2015_netRxns');
-#pre-load the models
-#thermomodels = exCOBRA01.get_models(model_ids_I=['151026_iDM2015']);
-#test_O = exmeasuredData01.execute_testMeasuredFluxes(
-#    experiment_id_I = 'ALEWt01',
-#    models_I=thermomodels,
-#    model_ids_I=['151026_iDM2015'],
-#    diagnose_I=True);
-#thermomodels = exCOBRA01.get_models(model_ids_I=['151026_iDM2015_netRxns']);
-#test_O = exmeasuredData01.execute_testMeasuredFluxes(
-#    experiment_id_I = 'ALEWt01',
-#    models_I=thermomodels,
-#    model_ids_I=['151026_iDM2015_netRxns'],
-#    diagnose_I=True,
-#    update_measuredFluxes_I=True,
-#    adjustment_1_I=True,
-#    adjustment_2_I=False,
-#    );
-#test_O = exmeasuredData01.execute_testMeasuredFluxes(
-#    experiment_id_I = 'ALEWt01',
-#    models_I=thermomodels,
-#    model_ids_I=['151026_iDM2015_netRxns'],
-#    diagnose_I=False,
-#    update_measuredFluxes_I=False);
-
-##151026_iDM2014
-##make the tfba table
-#from SBaaS_thermodynamics.stage03_quantification_tfba_execute import stage03_quantification_tfba_execute
-#extfba01 = stage03_quantification_tfba_execute(session,engine,pg_settings.datadir_settings)
-#extfba01.initialize_dataStage03_quantification_tfba();
-#for simulation_id in simulation_ids:
-#    ##reset previous simulations
-#    ##extfba01.reset_dataStage03_quantification_tfba(simulation_id);
-#    inconsistent_tcc=['IPDPS', 'IMPD','PPKr_reverse', 'NTD4', 'TPI', 'PGMT_reverse']
-#    #load sampling points after sampling
-#    extfba01.execute_analyzeThermodynamicSamplingPoints(simulation_id,
-#                models_I=thermomodels,
-#                data_dir_I=data_dir_I,
-#                inconsistent_tcc_I=inconsistent_tcc,
-#                remove_pointsNotInSolutionSpace_I=True,
-#                min_pointsInSolutionSpace_I=1);
