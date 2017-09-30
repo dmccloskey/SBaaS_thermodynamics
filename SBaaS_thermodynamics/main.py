@@ -57,7 +57,8 @@ exCOBRA01.initialize_tables()
 #    );
 
 #pre-load the models
-thermomodels = exCOBRA01.get_models(model_ids_I=["iJO1366_irreversible"]);
+thermomodels = exCOBRA01.get_models(model_ids_I=["iJO1366"]);
+#thermomodels = exCOBRA01.get_models(model_ids_I=["iJO1366_ALEWt_irreversible"]);
 
 #make the measuredData table
 from SBaaS_thermodynamics.stage03_quantification_measuredData_execute import stage03_quantification_measuredData_execute
@@ -65,28 +66,28 @@ exmeasuredData01 = stage03_quantification_measuredData_execute(session,engine,pg
 exmeasuredData01.initialize_supportedTables();
 exmeasuredData01.initialize_tables()
 
-#reset previous experimental data imports
-exmeasuredData01.reset_dataStage03_quantification_metabolomicsData('IndustrialStrains03');
+##reset previous experimental data imports
+#exmeasuredData01.reset_dataStage03_quantification_metabolomicsData('IndustrialStrains03');
 
-#transfer measured metabolomics data from data_stage01_quantification_averagesMIGeo
-exmeasuredData01.execute_makeMetabolomicsData_intracellular('IndustrialStrains03');
+##transfer measured metabolomics data from data_stage01_quantification_averagesMIGeo
+#exmeasuredData01.execute_makeMetabolomicsData_intracellular('IndustrialStrains03');
 
-#import exometabolomic information (i.e., media)
-exmeasuredData01.import_dataStage03QuantificationMetabolomicsData_add(
-    pg_settings.datadir_settings['workspace_data']+'/_input/170930_data_stage03_quantification_metabolomicsData_glcM901.csv');
+##import exometabolomic information (i.e., media)
+#exmeasuredData01.import_dataStage03QuantificationMetabolomicsData_add(
+#    pg_settings.datadir_settings['workspace_data']+'/_input/170930_data_stage03_quantification_metabolomicsData_glcM901.csv');
 
 #make the otherData table
 from SBaaS_thermodynamics.stage03_quantification_otherData_execute import stage03_quantification_otherData_execute
 exotherData01 = stage03_quantification_otherData_execute(session,engine,pg_settings.datadir_settings)
-exdGr01.initialize_supportedTables();
-exdGr01.initialize_tables()
+exotherData01.initialize_supportedTables();
+exotherData01.initialize_tables()
 
-#reset previous experimental data imports
-exotherData01.reset_dataStage03_quantification_otherData('IndustrialStrains03');
+##reset previous experimental data imports
+#exotherData01.reset_dataStage03_quantification_otherData('IndustrialStrains03');
 
-# import the pH, ionic strength, and temperature for the simulation
-exotherData01.import_dataStage03OtherData_add(
-    pg_settings.datadir_settings['workspace_data']+'/_input/170930_data_stage03_quantification_otherData01.csv');
+## import the pH, ionic strength, and temperature for the simulation
+#exotherData01.import_dataStage03QuantificationOtherData_add(
+#    pg_settings.datadir_settings['workspace_data']+'/_input/170930_data_stage03_quantification_otherData01.csv');
 
 #make the simulatedData table
 from SBaaS_thermodynamics.stage03_quantification_simulatedData_execute import stage03_quantification_simulatedData_execute
@@ -94,11 +95,11 @@ exsimData01 = stage03_quantification_simulatedData_execute(session,engine,pg_set
 exsimData01.initialize_supportedTables();
 exsimData01.initialize_tables()
 
-#reset previous experiments
-exsimData01.reset_dataStage03_quantification_simulatedData('IndustrialStrains03')
+##reset previous experiments
+#exsimData01.reset_dataStage03_quantification_simulatedData('IndustrialStrains03')
 
-# perform FVA and single reaction deletion simulations
-exsimData01.execute_makeSimulatedData('IndustrialStrains03',models_I=thermomodels)
+## perform FVA and single reaction deletion simulations
+#exsimData01.execute_makeSimulatedData('IndustrialStrains03',models_I=thermomodels)
 
 #make the dG_f table
 from SBaaS_thermodynamics.stage03_quantification_dG_f_execute import stage03_quantification_dG_f_execute
@@ -106,14 +107,12 @@ exdGf01 = stage03_quantification_dG_f_execute(session,engine,pg_settings.datadir
 exdGf01.initialize_supportedTables();
 exdGf01.initialize_tables()
 
-#reset previous dG_f adjustments
-exdGf01.reset_dataStage03_quantification_dG_f('IndustrialStrains03');
+##reset previous dG_f adjustments
+#exdGf01.reset_dataStage03_quantification_dG_f('IndustrialStrains03');
 
-# adjust dG0 compound formation energies to the in vivo dG compound formation energies
-# i.e, to the specified pH, ionic strength and temperature
-exdGf01.execute_adjust_dG_f('IndustrialStrains03',models_I=thermomodels);
-
-
+## adjust dG0 compound formation energies to the in vivo dG compound formation energies
+## i.e, to the specified pH, ionic strength and temperature
+#exdGf01.execute_adjust_dG_f('IndustrialStrains03',models_I=thermomodels);
 
 #make the dG_r table
 from SBaaS_thermodynamics.stage03_quantification_dG_r_execute import stage03_quantification_dG_r_execute
@@ -121,15 +120,15 @@ exdGr01 = stage03_quantification_dG_r_execute(session,engine,pg_settings.datadir
 exdGr01.initialize_supportedTables();
 exdGr01.initialize_tables()
 
-# reset previous analyses
-exdGr01.reset_dataStage03_quantification_dG_r_all('IndustrialStrains03');
+## reset previous analyses
+#exdGr01.reset_dataStage03_quantification_dG_r_all('IndustrialStrains03');
 
-# calculate the in vivo dG reaction energies from adjusted dG_f and metabolomics values
-# 1. dG0_r values are first calculated from the dG_f values
-# 2. dG_r values are calculated from the dG0_r values and measured data
-# 3. A thermodynamic consistency check is performed based on 
-#    FVA, SRA, and dG_r values 
-exdGr01.execute_calculate_dG_r('IndustrialStrains03',models_I=thermomodels);
+## calculate the in vivo dG reaction energies from adjusted dG_f and metabolomics values
+## 1. dG0_r values are first calculated from the dG_f values
+## 2. dG_r values are calculated from the dG0_r values and measured data
+## 3. A thermodynamic consistency check is performed based on 
+##    FVA, SRA, and dG_r values 
+#exdGr01.execute_calculate_dG_r('IndustrialStrains03',models_I=thermomodels);
 
 exdGr01.reset_dataStage03_quantification_dG_r_comparison(
     analysis_id_I='ALEsKOs01_0_evo04_0_11_evo04gnd'
