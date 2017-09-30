@@ -72,7 +72,8 @@ exmeasuredData01.reset_dataStage03_quantification_metabolomicsData('IndustrialSt
 exmeasuredData01.execute_makeMetabolomicsData_intracellular('IndustrialStrains03');
 
 #import exometabolomic information (i.e., media)
-exmeasuredData01.import_dataStage03QuantificationMetabolomicsData_add(pg_settings.datadir_settings['workspace_data']+'/_input/141007_data_stage03_quantification_metabolomicsData_glcM902.csv');
+exmeasuredData01.import_dataStage03QuantificationMetabolomicsData_add(
+    pg_settings.datadir_settings['workspace_data']+'/_input/170930_data_stage03_quantification_metabolomicsData_glcM901.csv');
 
 #make the otherData table
 from SBaaS_thermodynamics.stage03_quantification_otherData_execute import stage03_quantification_otherData_execute
@@ -84,7 +85,8 @@ exdGr01.initialize_tables()
 exotherData01.reset_dataStage03_quantification_otherData('IndustrialStrains03');
 
 # import the pH, ionic strength, and temperature for the simulation
-exotherData01.import_dataStage03OtherData_add(pg_settings.datadir_settings['workspace_data']+'/_input/141007_data_stage03_quantification_otherData.csv');
+exotherData01.import_dataStage03OtherData_add(
+    pg_settings.datadir_settings['workspace_data']+'/_input/170930_data_stage03_quantification_otherData01.csv');
 
 #make the simulatedData table
 from SBaaS_thermodynamics.stage03_quantification_simulatedData_execute import stage03_quantification_simulatedData_execute
