@@ -438,44 +438,147 @@ class stage03_quantification_tfba_execute(stage03_quantification_tfba_io,
            measured_dG_f_coveragea_criteria_I = float, minimum dG_f coverage to consider for feasibility
            solver_I = string, solver name
         '''
+        
+        data_O = []
+        modelsCOBRA = models_COBRA_dependencies();
+        # get simulation information
+        simulation_info_all = [];
+        simulation_info_all = self.get_rows_simulationIDAndSimulationType_dataStage03QuantificationSimulation(simulation_id_I,'sampling')
+        if not simulation_info_all:
+            print('simulation not found!')
+            return;
+        simulation_info = simulation_info_all[0]; # unique constraint guarantees only 1 row will be returned
+        # get simulation parameters
+        simulation_parameters_all = [];
+        simulation_parameters_all = self.get_rows_simulationID_dataStage03QuantificationSimulationParameters(simulation_id_I);
+        if not simulation_parameters_all:
+            print('simulation not found!')
+            return;
+        simulation_parameters = simulation_parameters_all[0]; # unique constraint guarantees only 1 row will be returned
+        # get the cobra model
+        cobra_model = models_I[simulation_info['model_id']];
+        # copy the model
+        cobra_model_copy = cobra_model.copy();
+        # get rxn_ids
+        if rxn_ids_I:
+            rxn_ids = rxn_ids_I;
+        else:
+            rxn_ids = [];
+            rxn_ids = self.get_rows_experimentIDAndModelIDAndSampleNameAbbreviation_dataStage03QuantificationMeasuredFluxes(simulation_info['experiment_id'],simulation_info['model_id'],simulation_info['sample_name_abbreviation']);
+        for rxn in rxn_ids:
+            # constrain the model
+            cobra_model_copy.reactions.get_by_id(rxn['rxn_id']).lower_bound = rxn['flux_lb'];
+            cobra_model_copy.reactions.get_by_id(rxn['rxn_id']).upper_bound = rxn['flux_ub'];
+        # make the model irreversible
+        convert_to_irreversible(cobra_model_copy);
+        # get otherData
+        pH,temperature,ionic_strength = {},{},{}
+        pH,temperature,ionic_strength = self.get_rowsFormatted_experimentIDAndTimePointAndSampleNameAbbreviation_dataStage03QuantificationOtherData(simulation_info['experiment_id'],simulation_info['time_point'],simulation_info['sample_name_abbreviation']);
+        # load pH, ionic_strength, and temperature parameters
+        other_data = thermodynamics_otherData(pH_I=pH,temperature_I=temperature,ionic_strength_I=ionic_strength);
+        other_data.check_data();
+        # get dG_f data:
+        dG_f = {};
+        dG_f = self.get_rowsDict_experimentIDAndModelIDAndTimePointAndSampleNameAbbreviations_dataStage03QuantificationDGf(simulation_info['experiment_id'],simulation_info['model_id'],simulation_info['time_point'],simulation_info['sample_name_abbreviation']);
+        dG_f_data = thermodynamics_dG_f_data(dG_f_I=dG_f);
+        dG_f_data.format_dG_f();
+        dG_f_data.generate_estimated_dG_f(cobra_model)
+        dG_f_data.check_data(); 
+        # remove an inconsistent dGf values
+        if inconsistent_dG_f_I: dG_f_data.remove_measured_dG_f(inconsistent_dG_f_I)
+        # query metabolomicsData
+        concentrations = [];
+        concentrations = self.get_rowsDict_experimentIDAndTimePointAndSampleNameAbbreviations_dataStage03QuantificationMetabolomicsData(simulation_info['experiment_id'],simulation_info['time_point'],simulation_info['sample_name_abbreviation']);
+        # load metabolomicsData
+        metabolomics_data = thermodynamics_metabolomicsData(measured_concentrations_I=concentrations);
+        metabolomics_data.generate_estimated_metabolomics_data(cobra_model);
+        # remove an inconsistent concentration values
+        if inconsistent_concentrations_I: metabolomics_data.remove_measured_concentrations(inconsistent_concentrations_I);
+        # get dG0r, dGr, and tcc data
+        dG0_r = {};
+        dG0_r = self.get_rowsDict_experimentIDAndModelIDAndTimePointAndSampleNameAbbreviations_dataStage03QuantificationDG0r(simulation_info['experiment_id'],simulation_info['model_id'],simulation_info['time_point'],simulation_info['sample_name_abbreviation'])
+        measured_concentration_coverage,measured_dG_f_coverage,feasible = {},{},{};
+        measured_concentration_coverage,measured_dG_f_coverage,feasible = self.get_rowsDict_experimentIDAndModelIDAndTimePointAndSampleNameAbbreviations_dataStage03QuantificationTCC(simulation_info['experiment_id'],simulation_info['model_id'],simulation_info['time_point'],simulation_info['sample_name_abbreviation'],0,0)
+        tcc = thermodynamics_dG_r_data(dG0_r_I = dG0_r,
+                 dG_r_coverage_I = measured_dG_f_coverage,
+                 metabolomics_coverage_I = measured_concentration_coverage,
+                 thermodynamic_consistency_check_I = feasible);
+        if inconsistent_tcc_I: tcc.change_feasibleReactions(inconsistent_tcc_I);
+        
+        tfba = thermodynamics_tfba()
+        cobra_model_copy1 = cobra_model_copy.copy()
+        tfba.tfva(cobra_model_copy1, 
+            tcc.dG0_r,other_data.temperature,
+            tcc.dG_r_coverage, tcc.thermodynamic_consistency_check,
+            use_measured_dG0_r=True, reaction_list=None,fraction_of_optimum=1.0, solver=solver_I,
+            objective_sense="maximize")
 
-        #TODO:
-        #1. execute tfva
-        #2. analyze points (analyze_tfva_results)
-
-    def execute_tfva_dG_r(self,simulation_id_I,models_I,
-                    data_dir_I,rxn_ids_I=[],
-                    inconsistent_dG_f_I=[],inconsistent_concentrations_I=[],
-                    inconsistent_tcc_I=[],
-                    measured_concentration_coverage_criteria_I=0.5,
-                    measured_dG_f_coverage_criteria_I=0.99,
-                    solver_I='glpk'):
-        '''execute a thermodynamic flux variability analysis on the dG_r variables
-        using the thermodynamic module for cobrapy
-
-        Input:
-           inconsistent_dG_f_I = dG_f measured values to be substituted for estimated values
-           inconsistent_concentrations_I = concentration measured values to be substituted for estimated values
-           inconsistent_tcc_I = reactions considered feasible to be changed to infeasible so that dG0_r constraints do not break the model
-           measured_concentration_coverage_criteria_I = float, minimum concentration coverage to consider for feasibility
-           measured_dG_f_coveragea_criteria_I = float, minimum dG_f coverage to consider for feasibility
-           solver_I = string, solver name
-        '''
-    def execute_tfva_concentrations(self,simulation_id_I,models_I,
-                    data_dir_I,rxn_ids_I=[],
-                    inconsistent_dG_f_I=[],inconsistent_concentrations_I=[],
-                    inconsistent_tcc_I=[],
-                    measured_concentration_coverage_criteria_I=0.5,
-                    measured_dG_f_coverage_criteria_I=0.99,
-                    solver_I='glpk'):
-        '''execute a thermodynamic flux variability analysis on the concentration variables
-        using the thermodynamic module for cobrapy
-
-        Input:
-           inconsistent_dG_f_I = dG_f measured values to be substituted for estimated values
-           inconsistent_concentrations_I = concentration measured values to be substituted for estimated values
-           inconsistent_tcc_I = reactions considered feasible to be changed to infeasible so that dG0_r constraints do not break the model
-           measured_concentration_coverage_criteria_I = float, minimum concentration coverage to consider for feasibility
-           measured_dG_f_coveragea_criteria_I = float, minimum dG_f coverage to consider for feasibility
-           solver_I = string, solver name
-        '''
+        tfba.analyze_tfva_results(threshold=1e-6)
+        for k,v in tfba.tfva_data.items():
+            analysis_list = []
+            for k1,v1 in tfba.tfva_analysis[k].items():
+                if v1:
+                    analysis_list.append(k1)
+            analysis_str = ';'.join(analysis_list)
+            row = {'simulation_id':simulation_id_I,
+            'simulation_dateAndTime':None,
+            'variable_id':k,
+            'variable_type':'flux',
+            'variable_units':v['units'],
+            'fva_minimum':v['flux_lb'],
+            'fva_maximum':v['flux_ub'],
+            'fva_method':'tfva',
+            'allow_loops':True,
+            'fva_options':None,
+            'solver_id':solver_I,
+            'used_':True,
+            'comment_':analysis_str}
+            data_O.append(row)
+            
+        cobra_model_copy1 = cobra_model_copy.copy()
+        tfba.tfva_dG_r(cobra_model_copy1, 
+            tcc.dG0_r,other_data.temperature,
+            tcc.dG_r_coverage, tcc.thermodynamic_consistency_check,
+            use_measured_dG0_r=True, fraction_of_optimum=1.0, solver=solver_I,
+            objective_sense="maximize")
+        for k,v in tfba.tfva_dG_r_data.items():
+            row = {'simulation_id':simulation_id_I,
+            'simulation_dateAndTime':None,
+            'variable_id':k,
+            'variable_type':'dG_r',
+            'variable_units':v['units'],
+            'fva_minimum':v['flux_lb'],
+            'fva_maximum':v['flux_ub'],
+            'fva_method':'tfva',
+            'allow_loops':True,
+            'fva_options':None,
+            'solver_id':solver_I,
+            'used_':True,
+            'comment_':None}
+            data_O.append(row)
+            
+        cobra_model_copy1 = cobra_model_copy.copy()
+        tfba.tfva_concentrations(cobra_model_copy1, 
+            metabolomics_data.measured_concentrations, metabolomics_data.estimated_concentrations,
+            tcc.dG0_r,other_data.temperature,tcc.metabolomics_coverage,
+            tcc.dG_r_coverage, tcc.thermodynamic_consistency_check,
+            measured_concentration_coverage_criteria = 0.5, measured_dG_f_coverage_criteria = 0.99,
+            use_measured_concentrations=True,use_measured_dG0_r=True,fraction_of_optimum=1.0, solver=solver_I,
+            objective_sense="maximize")
+        for k,v in tfba.tfva_concentrations_data.items():
+            row = {'simulation_id':simulation_id_I,
+            'simulation_dateAndTime':None,
+            'variable_id':k,
+            'variable_type':'conc_ln',
+            'variable_units':v['units'],
+            'fva_minimum':v['flux_lb'],
+            'fva_maximum':v['flux_ub'],
+            'fva_method':'tfva',
+            'allow_loops':True,
+            'fva_options':None,
+            'solver_id':solver_I,
+            'used_':True,
+            'comment_':None}
+            data_O.append(row)
+        if data_O:
+            self.add_rows_table('data_stage03_quantification_simulatedData_tfva',data_O);

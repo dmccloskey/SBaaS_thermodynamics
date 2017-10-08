@@ -18,6 +18,7 @@ class stage03_quantification_tfba_query(sbaas_template_query):
         '''
         tables_supported = {'data_stage03_quantification_sampledData':data_stage03_quantification_sampledData,
             'data_stage03_quantification_sampledPoints':data_stage03_quantification_sampledPoints,
+            'data_stage03_quantification_simulatedData_tfva':data_stage03_quantification_simulatedData_tfva,
             };
         self.set_supportedTables(tables_supported);
     def drop_dataStage03_quantification_tfba(self):

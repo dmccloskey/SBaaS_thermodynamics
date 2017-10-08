@@ -62,7 +62,6 @@ class data_stage03_quantification_sampledPoints(Base):
     
     def __repr__json__(self):
         return json.dumps(self.__repr__dict__())
-
 class data_stage03_quantification_sampledData(Base):
     __tablename__ = 'data_stage03_quantification_sampledData'
     id = Column(Integer, Sequence('data_stage03_quantification_sampledData_id_seq'), primary_key=True)
@@ -177,74 +176,161 @@ class data_stage03_quantification_sampledData(Base):
     
     def __repr__json__(self):
         return json.dumps(self.__repr__dict__())
-#TODO:
-class data_stage03_quantification_tfbaReactions(Base):
-    __tablename__ = 'data_stage03_quantification_tfbaReactions'
-    id = Column(Integer, Sequence('data_stage03_quantification_tfbaReactions_id_seq'), primary_key=True)
-    experiment_id = Column(String(50), primary_key=True)
-    model_id = Column(String(50), primary_key=True)
-    sample_name_abbreviation = Column(String(100), primary_key=True)
-    time_point = Column(String(10), primary_key=True)
-    rxn_id = Column(String(100), primary_key=True)
-    flux_units = Column(String(50), default = 'mmol*gDW-1*hr-1');
-    tfba_flux = Column(Float);
-    tfva_flux_minimum = Column(Float);
-    tfva_flux_maximum = Column(Float);
-    tsampling_flux_average = Column(Float);
-    tsampling_flux_var = Column(Float);
-    dG_r_units = Column(Float);
-    tfba_dG_r = Column(Float);
-    tfva_dG_r_lb = Column(Float);
-    tfva_dG_r_ub = Column(Float);
-    tsampling_dG_r_average = Column(Float);
-    tsampling_dG_r_var = Column(Float);
+class data_stage03_quantification_simulatedData_tfva(Base):
+    __tablename__ = 'data_stage03_quantification_simulatedData_tfva'
+    id = Column(Integer, Sequence('data_stage03_quantification_simulatedData_tfva_id_seq'), primary_key=True)
+    simulation_id = Column(String(500))
+    simulation_dateAndTime = Column(DateTime);
+    variable_id = Column(String(100))
+    variable_type = Column(String(50)) # e.g., flux, concentration, dG_r
+    variable_units = Column(String(50), default = 'mmol*gDW-1*hr-1'); 
+    fva_minimum = Column(Float);
+    fva_maximum = Column(Float);
+    fva_method = Column(String(100))
+    allow_loops = Column(Boolean);
+    fva_options = Column(postgresql.JSON);
+    solver_id = Column(String);
     used_ = Column(Boolean);
     comment_ = Column(Text);
-    
+
+    __table_args__ = (
+            UniqueConstraint('simulation_id',
+                             'variable_id',
+                             'variable_type',
+                             'simulation_dateAndTime',
+                             'variable_units',
+                             'fva_method',
+                             'allow_loops',
+                             'solver_id'
+                             ),
+            )
+
     def __init__(self, 
                 row_dict_I,
                 ):
-        pass;
-    def __set__row__(self,experiment_id_I):
-        self.experiment_id=experiment_id_I
+        self.fva_maximum=row_dict_I['fva_maximum'];
+        self.fva_minimum=row_dict_I['fva_minimum'];
+        self.fva_method=row_dict_I['fva_method'];
+        self.simulation_dateAndTime=row_dict_I['simulation_dateAndTime'];
+        self.simulation_id=row_dict_I['simulation_id'];
+        self.comment_=row_dict_I['comment_'];
+        self.used_=row_dict_I['used_'];
+        self.fva_options=row_dict_I['fva_options'];
+        self.allow_loops=row_dict_I['allow_loops'];
+        self.solver_id=row_dict_I['solver_id'];
+        self.variable_id=row_dict_I['variable_id'];
+        self.variable_type=row_dict_I['variable_type'];
+        self.variable_units=row_dict_I['variable_units'];
+
+    def __set__row__(self,simulation_id_I,
+        simulation_dateAndTime_I,
+            variable_id_I,variable_type_I,variable_units_I,
+                 fva_minimum_I,fva_maximum_I,fva_method_I,
+                 allow_loops_I,
+                 fva_options_I,
+        solver_id_I,
+                 used__I,comment__I):
+        self.simulation_id=simulation_id_I
+        self.variable_id=variable_id_I
+        self.variable_type=variable_type_I
+        self.variable_units=variable_units_I
+        self.fva_minimum=fva_minimum_I
+        self.fva_maximum=fva_maximum_I
+        self.fva_method=fva_method_I
+        self.allow_loops=allow_loops_I
+        self.fva_options=fva_options_I
+        self.solver_id=solver_id_I
+        self.used_=used__I
+        self.comment_=comment__I
 
     def __repr__dict__(self):
-        return {}
+        return {'id':self.id,
+                'simulation_id':self.simulation_id,
+                'simulation_dateAndTime':self.simulation_id,
+                'variable_id':self.variable_id,
+                'variable_type':self.variable_type,
+                'variable_units':self.variable_units,
+                'fva_minimum':self.fva_minimum,
+                'fva_maximum':self.fva_maximum,
+                'fva_method':self.fva_method,
+                'allow_loops':self.allow_loops,
+                'fva_options':self.fva_options,
+            'solver_id':self.solver_id,
+                'used_':self.used_,
+                'comment_':self.comment_}
     
     def __repr__json__(self):
         return json.dumps(self.__repr__dict__())
-class data_stage03_quantification_tfbaMetabolites(Base):
-    __tablename__ = 'data_stage03_quantification_tfbaMetabolites'
-    id = Column(Integer, Sequence('data_stage03_quantification_tfbaMetabolites_id_seq'), primary_key=True)
-    experiment_id = Column(String(100), primary_key=True)
-    sample_name_abbreviation = Column(String(100), primary_key=True)
-    time_point = Column(String(10), primary_key=True)
-    met_id = Column(String(100), primary_key=True)
-    concentration_units = Column(String(50));
-    tfba_concentration_lb = Column(Float);
-    tfva_concentration_lb = Column(Float);
-    tfva_concentration_ub = Column(Float);
-    tsampling_concentration_average = Column(Float);
-    tsampling_concentration_var = Column(Float);
-    dG_f_units = Column(Float);
-    tfba_dG_f = Column(Float);
-    tfva_dG_f_lb = Column(Float);
-    tfva_dG_f_ub = Column(Float);
-    tsampling_dG_f_average = Column(Float);
-    tsampling_dG_f_var = Column(Float);
-    used_ = Column(Boolean);
-    comment_ = Column(Text);
-    
-    def __init__(self, 
-                row_dict_I,
-                ):
-        pass;
-    def __set__row__(self, experiment_id_I):
-        self.experiment_id = experiment_id_I;
 
-    def __repr__dict__(self): 
-        return {}
+
+#TODO:
+#class data_stage03_quantification_tfbaReactions(Base):
+#    __tablename__ = 'data_stage03_quantification_tfbaReactions'
+#    id = Column(Integer, Sequence('data_stage03_quantification_tfbaReactions_id_seq'), primary_key=True)
+#    experiment_id = Column(String(50), primary_key=True)
+#    model_id = Column(String(50), primary_key=True)
+#    sample_name_abbreviation = Column(String(100), primary_key=True)
+#    time_point = Column(String(10), primary_key=True)
+#    rxn_id = Column(String(100), primary_key=True)
+#    flux_units = Column(String(50), default = 'mmol*gDW-1*hr-1');
+#    tfba_flux = Column(Float);
+#    tfva_flux_minimum = Column(Float);
+#    tfva_flux_maximum = Column(Float);
+#    tsampling_flux_average = Column(Float);
+#    tsampling_flux_var = Column(Float);
+#    dG_r_units = Column(Float);
+#    tfba_dG_r = Column(Float);
+#    tfva_dG_r_lb = Column(Float);
+#    tfva_dG_r_ub = Column(Float);
+#    tsampling_dG_r_average = Column(Float);
+#    tsampling_dG_r_var = Column(Float);
+#    used_ = Column(Boolean);
+#    comment_ = Column(Text);
     
-    def __repr__json__(self):
-        return json.dumps(self.__repr__dict__())
+#    def __init__(self, 
+#                row_dict_I,
+#                ):
+#        pass;
+#    def __set__row__(self,experiment_id_I):
+#        self.experiment_id=experiment_id_I
+
+#    def __repr__dict__(self):
+#        return {}
+    
+#    def __repr__json__(self):
+#        return json.dumps(self.__repr__dict__())
+#class data_stage03_quantification_tfbaMetabolites(Base):
+#    __tablename__ = 'data_stage03_quantification_tfbaMetabolites'
+#    id = Column(Integer, Sequence('data_stage03_quantification_tfbaMetabolites_id_seq'), primary_key=True)
+#    experiment_id = Column(String(100), primary_key=True)
+#    sample_name_abbreviation = Column(String(100), primary_key=True)
+#    time_point = Column(String(10), primary_key=True)
+#    met_id = Column(String(100), primary_key=True)
+#    concentration_units = Column(String(50));
+#    tfba_concentration_lb = Column(Float);
+#    tfva_concentration_lb = Column(Float);
+#    tfva_concentration_ub = Column(Float);
+#    tsampling_concentration_average = Column(Float);
+#    tsampling_concentration_var = Column(Float);
+#    dG_f_units = Column(Float);
+#    tfba_dG_f = Column(Float);
+#    tfva_dG_f_lb = Column(Float);
+#    tfva_dG_f_ub = Column(Float);
+#    tsampling_dG_f_average = Column(Float);
+#    tsampling_dG_f_var = Column(Float);
+#    used_ = Column(Boolean);
+#    comment_ = Column(Text);
+    
+#    def __init__(self, 
+#                row_dict_I,
+#                ):
+#        pass;
+#    def __set__row__(self, experiment_id_I):
+#        self.experiment_id = experiment_id_I;
+
+#    def __repr__dict__(self): 
+#        return {}
+    
+#    def __repr__json__(self):
+#        return json.dumps(self.__repr__dict__())
 
