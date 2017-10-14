@@ -27,23 +27,29 @@ class stage03_quantification_dG_r_query(sbaas_template_query):
     ## Query from data_stage03_quantification_dG0_r
     # query rows from data_stage03_quantificaton_dG0_r
     def get_rowsDict_experimentIDAndModelIDAndTimePointAndSampleNameAbbreviations_dataStage03QuantificationDG0r(self,experiment_id_I,
-                                                                                                           model_id_I,
-                                                                                                           time_point_I,
-                                                                                                           sample_name_abbreviation_I,
-                                                                                                 measured_dG_f_coverage_criteria_I=0.0):
+        model_id_I,
+        time_point_I,
+        sample_name_abbreviation_I,
+        measured_dG_f_coverage_criteria_I=0.0):
         '''Query rows that are used from the dG_r'''
         try:
+            #data = self.session.query(data_stage03_quantification_dG0_r).filter(
+            #        data_stage03_quantification_dG0_r.model_id.like(model_id_I),
+            #        data_stage03_quantification_dG0_r.time_point.like(time_point_I),
+            #        data_stage03_quantification_dG0_r.sample_name_abbreviation.like(sample_name_abbreviation_I),
+            #        data_stage03_quantification_dG0_r.experiment_id.like(experiment_id_I),
+            #        data_stage03_quantification_dG0_r.model_id.like(data_stage03_quantification_tcc.model_id),
+            #        data_stage03_quantification_dG0_r.time_point.like(data_stage03_quantification_tcc.time_point),
+            #        data_stage03_quantification_dG0_r.sample_name_abbreviation.like(data_stage03_quantification_tcc.sample_name_abbreviation),
+            #        data_stage03_quantification_dG0_r.experiment_id.like(data_stage03_quantification_tcc.experiment_id),
+            #        data_stage03_quantification_dG0_r.rxn_id.like(data_stage03_quantification_tcc.rxn_id),
+            #        data_stage03_quantification_tcc.measured_dG_f_coverage>measured_dG_f_coverage_criteria_I,
+            #        data_stage03_quantification_dG0_r.used_.is_(True)).all();
             data = self.session.query(data_stage03_quantification_dG0_r).filter(
                     data_stage03_quantification_dG0_r.model_id.like(model_id_I),
                     data_stage03_quantification_dG0_r.time_point.like(time_point_I),
                     data_stage03_quantification_dG0_r.sample_name_abbreviation.like(sample_name_abbreviation_I),
                     data_stage03_quantification_dG0_r.experiment_id.like(experiment_id_I),
-                    data_stage03_quantification_dG0_r.model_id.like(data_stage03_quantification_tcc.model_id),
-                    data_stage03_quantification_dG0_r.time_point.like(data_stage03_quantification_tcc.time_point),
-                    data_stage03_quantification_dG0_r.sample_name_abbreviation.like(data_stage03_quantification_tcc.sample_name_abbreviation),
-                    data_stage03_quantification_dG0_r.experiment_id.like(data_stage03_quantification_tcc.experiment_id),
-                    data_stage03_quantification_dG0_r.rxn_id.like(data_stage03_quantification_tcc.rxn_id),
-                    data_stage03_quantification_tcc.measured_dG_f_coverage>measured_dG_f_coverage_criteria_I,
                     data_stage03_quantification_dG0_r.used_.is_(True)).all();
             rows_O = {};
             if data: 
@@ -446,9 +452,7 @@ class stage03_quantification_dG_r_query(sbaas_template_query):
                         measured_dG_f_coverage_O[d.rxn_id]={
                         'measured_dG_f_coverage':d.measured_dG_f_coverage
                         };
-                        feasible_O[d.rxn_id]={
-                        'feasible':d.feasible
-                        };
+                        feasible_O[d.rxn_id]=d.feasible;
             return measured_concentration_coverage_O,measured_dG_f_coverage_O,feasible_O;
         except SQLAlchemyError as e:
             print(e);    

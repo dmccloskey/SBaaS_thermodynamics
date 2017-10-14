@@ -28,7 +28,8 @@ sys.path.append(pg_settings.datadir_settings['github']+'/SBaaS_COBRA')
 sys.path.append(pg_settings.datadir_settings['github']+'/io_utilities')
 sys.path.append(pg_settings.datadir_settings['github']+'/quantification_analysis')
 sys.path.append(pg_settings.datadir_settings['github']+'/matplotlib_utilities')
-sys.path.append(pg_settings.datadir_settings['github']+'/thermodynamics/thermodynamics')
+sys.path.append(pg_settings.datadir_settings['github']+'/thermodynamics')
+sys.path.append(pg_settings.datadir_settings['github']+'/sampling')
 sys.path.append(pg_settings.datadir_settings['github']+'/component-contribution')
 sys.path.append(pg_settings.datadir_settings['github']+'/molmass')
 sys.path.append(pg_settings.datadir_settings['github']+'/python_statistics')
@@ -57,8 +58,8 @@ exCOBRA01.initialize_tables()
 #    );
 
 #pre-load the models
-thermomodels = exCOBRA01.get_models(model_ids_I=["iJO1366"]);
-#thermomodels = exCOBRA01.get_models(model_ids_I=["iJO1366_ALEWt_irreversible"]);
+#thermomodels = exCOBRA01.get_models(model_ids_I=["iJO1366"]);
+thermomodels = exCOBRA01.get_models(model_ids_I=["iJO1366_ALEWt_irreversible"]);
 
 #make the measuredData table
 from SBaaS_thermodynamics.stage03_quantification_measuredData_execute import stage03_quantification_measuredData_execute
@@ -130,15 +131,48 @@ exdGr01.initialize_tables()
 ##    FVA, SRA, and dG_r values 
 #exdGr01.execute_calculate_dG_r('IndustrialStrains03',models_I=thermomodels);
 
-exdGr01.reset_dataStage03_quantification_dG_r_comparison(
-    analysis_id_I='ALEsKOs01_0_evo04_0_11_evo04gnd'
-    );
+#exdGr01.reset_dataStage03_quantification_dG_r_comparison(
+#    analysis_id_I='ALEsKOs01_0_evo04_0_11_evo04gnd'
+#    );
 
-#perform a thermodynamic comparison
-exdGr01.execute_compare_dG_r(
-    analysis_id_I='ALEsKOs01_0_evo04_0_11_evo04gnd',
-    simulation_id_base_I='ALEsKOs01_iJO1366_OxicEvo04EcoliGlc_0',
-    simulation_ids_I=[],
-    models_I=thermomodels,
-    measured_concentration_coverage_criteria_I=0.5,
-    measured_dG_f_coverage_criteria_I=0.99)
+##perform a thermodynamic comparison
+#exdGr01.execute_compare_dG_r(
+#    analysis_id_I='ALEsKOs01_0_evo04_0_11_evo04gnd',
+#    simulation_id_base_I='ALEsKOs01_iJO1366_OxicEvo04EcoliGlc_0',
+#    simulation_ids_I=[],
+#    models_I=thermomodels,
+#    measured_concentration_coverage_criteria_I=0.5,
+#    measured_dG_f_coverage_criteria_I=0.99)
+
+#make the dG_r table
+from SBaaS_thermodynamics.stage03_quantification_tfba_execute import stage03_quantification_tfba_execute
+tfba01 = stage03_quantification_tfba_execute(session,engine,pg_settings.datadir_settings)
+tfba01.initialize_supportedTables();
+tfba01.initialize_tables()
+
+simulation_ids = ["IndustrialStrains03_iJO1366_ALEWt_irreversible_EColi_BL21_0",
+"IndustrialStrains03_iJO1366_ALEWt_irreversible_EColi_C_0",
+"IndustrialStrains03_iJO1366_ALEWt_irreversible_EColi_Crooks_0",
+"IndustrialStrains03_iJO1366_ALEWt_irreversible_EColi_DH5a_0",
+"IndustrialStrains03_iJO1366_ALEWt_irreversible_EColi_MG1655_0",
+"IndustrialStrains03_iJO1366_ALEWt_irreversible_EColi_W_0",
+"IndustrialStrains03_iJO1366_ALEWt_irreversible_EColi_W3110_0",
+"IndustrialStrains03_iJO1366_EColi_BL21_0",
+"IndustrialStrains03_iJO1366_EColi_C_0",
+"IndustrialStrains03_iJO1366_EColi_Crooks_0",
+"IndustrialStrains03_iJO1366_EColi_DH5a_0",
+"IndustrialStrains03_iJO1366_EColi_MG1655_0",
+"IndustrialStrains03_iJO1366_EColi_W_0",
+"IndustrialStrains03_iJO1366_EColi_W3110_0"]
+
+for simulation_id in simulation_ids:
+    print("Running simulation_id: " + simulation_id)
+    tfba01.execute_tfva(simulation_id,
+        thermomodels,
+        data_dir_I = '',rxn_ids_I=[],
+        inconsistent_dG_f_I=[],
+        inconsistent_concentrations_I=[],
+        inconsistent_tcc_I=[],
+        measured_concentration_coverage_criteria_I=0.5,
+        measured_dG_f_coverage_criteria_I=0.99,
+        solver_I='glpk')

@@ -14,7 +14,8 @@ from thermodynamics.thermodynamics_otherData import thermodynamics_otherData
 from thermodynamics.thermodynamics_simulatedData import thermodynamics_simulatedData
 from thermodynamics.thermodynamics_tfba import thermodynamics_tfba
 # Dependencies from resources
-from SBaaS_COBRA.sampling import cobra_sampling,cobra_sampling_n
+from sampling.sampling import cobra_sampling
+from sampling.sampling_statistics import cobra_sampling,cobra_sampling_n
 from cobra.manipulation.modify import convert_to_irreversible
 
 class stage03_quantification_tfba_execute(stage03_quantification_tfba_io,
@@ -470,7 +471,7 @@ class stage03_quantification_tfba_execute(stage03_quantification_tfba_io,
             cobra_model_copy.reactions.get_by_id(rxn['rxn_id']).lower_bound = rxn['flux_lb'];
             cobra_model_copy.reactions.get_by_id(rxn['rxn_id']).upper_bound = rxn['flux_ub'];
         # make the model irreversible
-        convert_to_irreversible(cobra_model_copy);
+        convert_to_irreversible(cobra_model_copy); #TODO ensure that the model is irreversible before!
         # get otherData
         pH,temperature,ionic_strength = {},{},{}
         pH,temperature,ionic_strength = self.get_rowsFormatted_experimentIDAndTimePointAndSampleNameAbbreviation_dataStage03QuantificationOtherData(simulation_info['experiment_id'],simulation_info['time_point'],simulation_info['sample_name_abbreviation']);
@@ -508,7 +509,7 @@ class stage03_quantification_tfba_execute(stage03_quantification_tfba_io,
         tfba = thermodynamics_tfba()
         cobra_model_copy1 = cobra_model_copy.copy()
         tfba.tfva(cobra_model_copy1, 
-            tcc.dG0_r,other_data.temperature,
+            tcc.dG0_r,
             tcc.dG_r_coverage, tcc.thermodynamic_consistency_check,
             use_measured_dG0_r=True, reaction_list=None,fraction_of_optimum=1.0, solver=solver_I,
             objective_sense="maximize")
