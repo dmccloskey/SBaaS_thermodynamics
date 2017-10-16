@@ -132,13 +132,55 @@ exdGr01.initialize_tables()
 #exdGr01.execute_calculate_dG_r('IndustrialStrains03',models_I=thermomodels);
 
 #exdGr01.reset_dataStage03_quantification_dG_r_comparison(
-#    analysis_id_I='ALEsKOs01_0_evo04_0_11_evo04gnd'
+#    analysis_id_I='IndustrialStrains03_iJO1366_ALEWt_irreversible'
 #    );
 
-##perform a thermodynamic comparison
+#perform a thermodynamic comparison (pairwise b/w all strains)
 #exdGr01.execute_compare_dG_r(
-#    analysis_id_I='ALEsKOs01_0_evo04_0_11_evo04gnd',
-#    simulation_id_base_I='ALEsKOs01_iJO1366_OxicEvo04EcoliGlc_0',
+#    analysis_id_I='IndustrialStrains03_iJO1366_ALEWt_irreversible',
+#    simulation_id_base_I='IndustrialStrains03_iJO1366_ALEWt_irreversible_EColi_MG1655_0',
+#    simulation_ids_I=[],
+#    models_I=thermomodels,
+#    measured_concentration_coverage_criteria_I=0.5,
+#    measured_dG_f_coverage_criteria_I=0.99)
+#exdGr01.execute_compare_dG_r(
+#    analysis_id_I='IndustrialStrains03_iJO1366_ALEWt_irreversible',
+#    simulation_id_base_I='IndustrialStrains03_iJO1366_ALEWt_irreversible_EColi_BL21_0',
+#    simulation_ids_I=[],
+#    models_I=thermomodels,
+#    measured_concentration_coverage_criteria_I=0.5,
+#    measured_dG_f_coverage_criteria_I=0.99)
+#exdGr01.execute_compare_dG_r(
+#    analysis_id_I='IndustrialStrains03_iJO1366_ALEWt_irreversible',
+#    simulation_id_base_I='IndustrialStrains03_iJO1366_ALEWt_irreversible_EColi_C_0',
+#    simulation_ids_I=[],
+#    models_I=thermomodels,
+#    measured_concentration_coverage_criteria_I=0.5,
+#    measured_dG_f_coverage_criteria_I=0.99)
+#exdGr01.execute_compare_dG_r(
+#    analysis_id_I='IndustrialStrains03_iJO1366_ALEWt_irreversible',
+#    simulation_id_base_I='IndustrialStrains03_iJO1366_ALEWt_irreversible_EColi_Crooks_0',
+#    simulation_ids_I=[],
+#    models_I=thermomodels,
+#    measured_concentration_coverage_criteria_I=0.5,
+#    measured_dG_f_coverage_criteria_I=0.99)
+#exdGr01.execute_compare_dG_r(
+#    analysis_id_I='IndustrialStrains03_iJO1366_ALEWt_irreversible',
+#    simulation_id_base_I='IndustrialStrains03_iJO1366_ALEWt_irreversible_EColi_DH5a_0',
+#    simulation_ids_I=[],
+#    models_I=thermomodels,
+#    measured_concentration_coverage_criteria_I=0.5,
+#    measured_dG_f_coverage_criteria_I=0.99)
+#exdGr01.execute_compare_dG_r(
+#    analysis_id_I='IndustrialStrains03_iJO1366_ALEWt_irreversible',
+#    simulation_id_base_I='IndustrialStrains03_iJO1366_ALEWt_irreversible_EColi_W_0',
+#    simulation_ids_I=[],
+#    models_I=thermomodels,
+#    measured_concentration_coverage_criteria_I=0.5,
+#    measured_dG_f_coverage_criteria_I=0.99)
+#exdGr01.execute_compare_dG_r(
+#    analysis_id_I='IndustrialStrains03_iJO1366_ALEWt_irreversible',
+#    simulation_id_base_I='IndustrialStrains03_iJO1366_ALEWt_irreversible_EColi_W3110_0',
 #    simulation_ids_I=[],
 #    models_I=thermomodels,
 #    measured_concentration_coverage_criteria_I=0.5,

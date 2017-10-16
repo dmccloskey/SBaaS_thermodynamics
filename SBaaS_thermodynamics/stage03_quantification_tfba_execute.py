@@ -498,9 +498,12 @@ class stage03_quantification_tfba_execute(stage03_quantification_tfba_io,
         # get dG0r, dGr, and tcc data
         dG0_r = {};
         dG0_r = self.get_rowsDict_experimentIDAndModelIDAndTimePointAndSampleNameAbbreviations_dataStage03QuantificationDG0r(simulation_info['experiment_id'],simulation_info['model_id'],simulation_info['time_point'],simulation_info['sample_name_abbreviation'])
+        dG_r = {};
+        dG_r = self.get_rowsDict_experimentIDAndModelIDAndTimePointAndSampleNameAbbreviations_dataStage03QuantificationDG0r(simulation_info['experiment_id'],simulation_info['model_id'],simulation_info['time_point'],simulation_info['sample_name_abbreviation'])
         measured_concentration_coverage,measured_dG_f_coverage,feasible = {},{},{};
         measured_concentration_coverage,measured_dG_f_coverage,feasible = self.get_rowsDict_experimentIDAndModelIDAndTimePointAndSampleNameAbbreviations_dataStage03QuantificationTCC(simulation_info['experiment_id'],simulation_info['model_id'],simulation_info['time_point'],simulation_info['sample_name_abbreviation'],0,0)
         tcc = thermodynamics_dG_r_data(dG0_r_I = dG0_r,
+                    dG_r_I = dG_r,
                  dG_r_coverage_I = measured_dG_f_coverage,
                  metabolomics_coverage_I = measured_concentration_coverage,
                  thermodynamic_consistency_check_I = feasible);
@@ -509,7 +512,7 @@ class stage03_quantification_tfba_execute(stage03_quantification_tfba_io,
         tfba = thermodynamics_tfba()
         cobra_model_copy1 = cobra_model_copy.copy()
         tfba.tfva(cobra_model_copy1, 
-            tcc.dG0_r,
+            tcc.dG_r,#tcc.dG0_r,
             tcc.dG_r_coverage, tcc.thermodynamic_consistency_check,
             use_measured_dG0_r=True, reaction_list=None,fraction_of_optimum=1.0, solver=solver_I,
             objective_sense="maximize")
@@ -537,8 +540,8 @@ class stage03_quantification_tfba_execute(stage03_quantification_tfba_io,
             data_O.append(row)
             
         cobra_model_copy1 = cobra_model_copy.copy()
-        tfba.tfva_dG_r(cobra_model_copy1, 
-            tcc.dG0_r,other_data.temperature,
+        tfba.tfva_dG_r(cobra_model_copy1,  
+            tcc.dG_r,#tcc.dG0_r,
             tcc.dG_r_coverage, tcc.thermodynamic_consistency_check,
             use_measured_dG0_r=True, fraction_of_optimum=1.0, solver=solver_I,
             objective_sense="maximize")
