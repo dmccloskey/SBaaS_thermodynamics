@@ -452,13 +452,9 @@ class stage03_quantification_dG_r_query(sbaas_template_query):
                     if d.rxn_id in measured_concentration_coverage_O:
                         print('duplicate rxn_id found!');
                     else:
-                        measured_concentration_coverage_O[d.rxn_id]={
-                        'measured_concentration_coverage':d.measured_concentration_coverage
-                        };
-                        measured_dG_f_coverage_O[d.rxn_id]={
-                        'measured_dG_f_coverage':d.measured_dG_f_coverage
-                        };
-                        feasible_O[d.rxn_id]=d.feasible;
+                        measured_concentration_coverage_O[d.rxn_id]=d.measured_concentration_coverage
+                        measured_dG_f_coverage_O[d.rxn_id]=d.measured_dG_f_coverage
+                        feasible_O[d.rxn_id]=d.feasible
             return measured_concentration_coverage_O,measured_dG_f_coverage_O,feasible_O;
         except SQLAlchemyError as e:
             print(e);    
