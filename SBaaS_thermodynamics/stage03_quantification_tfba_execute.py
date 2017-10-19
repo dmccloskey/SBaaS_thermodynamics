@@ -508,6 +508,10 @@ class stage03_quantification_tfba_execute(stage03_quantification_tfba_io,
                  metabolomics_coverage_I = measured_concentration_coverage,
                  thermodynamic_consistency_check_I = feasible);
         if inconsistent_tcc_I: tcc.change_feasibleReactions(inconsistent_tcc_I);
+
+        import optlang
+        optlang.available_solvers['GUROBI']=True
+        solver_I = 'gurobi'
         
         tfba = thermodynamics_tfba()
         cobra_model_copy1 = cobra_model_copy.copy()
